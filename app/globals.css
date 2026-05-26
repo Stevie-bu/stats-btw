@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-brand-pink: #fa7fdf;
+  --color-brand-blue: #32a7ff;
+  --color-brand-black: #000000;
+  --color-brand-white: #fdfdfd;
+  --color-neutral-100: #f8f8f8;
+  --color-neutral-200: #f2f2f2;
+  --color-neutral-lighter: #cccccc;
+  --color-brand-turquoise: #7efaf3;
+  --color-brand-lemon: #fcff66;
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: #fdfdfd;
+  color: #000000;
+}
