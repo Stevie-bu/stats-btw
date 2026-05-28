@@ -109,7 +109,7 @@ export default function MapsPage() {
                   Beteiligung nach Kanton
                 </h2>
                 <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
-                  Durchschnittliche Teilnahmequote der bike to work Betriebe pro Kanton.
+                  Trimmed Mean (10%) der Teilnahmequote pro Kanton. Die obersten und untersten 10% der Werte werden entfernt.
                 </p>
                 <Suspense fallback={mapFallback}>
                   <KantonBeteiligungMap />

@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 import cantons from "@/data/ch-cantons.json";
 import kantonData from "@/data/kanton-beteiligung.json";
 
-type KantonEntry = { name: string; avg_beteiligung: number; betriebe: number };
+type KantonEntry = { name: string; trimmed_mean: number; betriebe: number };
 const data = kantonData as Record<string, KantonEntry>;
 
 const KT_NAMES: Record<string, string> = {
@@ -32,7 +32,7 @@ function getColor(bfsId: string): string {
   const d = data[bfsId];
   if (!d) return "#e0e0e0";
   for (const step of STEPS) {
-    if (d.avg_beteiligung >= step.min && d.avg_beteiligung < step.max) return step.color;
+    if (d.trimmed_mean >= step.min && d.trimmed_mean < step.max) return step.color;
   }
   return STEPS[STEPS.length - 1].color;
 }
@@ -129,10 +129,10 @@ export function KantonBeteiligungMap() {
             {KT_NAMES[info.name] || info.name} ({info.name})
           </p>
           <p className="text-2xl font-bold text-brand-blue mt-1">
-            {info.avg_beteiligung}%
+            {info.trimmed_mean}%
           </p>
           <p className="text-xs text-black/50">
-            Ø Beteiligung · {info.betriebe} Betriebe
+            Trimmed Mean (10%) · {info.betriebe} Betriebe
           </p>
         </div>
       )}
