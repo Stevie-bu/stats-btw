@@ -1,19 +1,20 @@
 "use client";
 
-import { lazy, Suspense } from "react";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import Link from "next/link";
 
-const SwissMap = lazy(() =>
-  import("@/components/SwissMap").then((m) => ({ default: m.SwissMap }))
+const SwissMap = dynamic(() =>
+  import("@/components/SwissMap").then((m) => m.SwissMap), { ssr: false }
 );
-const ChoroplethMap = lazy(() =>
-  import("@/components/ChoroplethMap").then((m) => ({ default: m.ChoroplethMap }))
+const ChoroplethMap = dynamic(() =>
+  import("@/components/ChoroplethMap").then((m) => m.ChoroplethMap), { ssr: false }
 );
-const DensityMap = lazy(() =>
-  import("@/components/DensityMap").then((m) => ({ default: m.DensityMap }))
+const DensityMap = dynamic(() =>
+  import("@/components/DensityMap").then((m) => m.DensityMap), { ssr: false }
 );
-const KantonBeteiligungMap = lazy(() =>
-  import("@/components/KantonBeteiligungMap").then((m) => ({ default: m.KantonBeteiligungMap }))
+const KantonBeteiligungMap = dynamic(() =>
+  import("@/components/KantonBeteiligungMap").then((m) => m.KantonBeteiligungMap), { ssr: false }
 );
 
 const mapFallback = (
