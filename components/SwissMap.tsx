@@ -99,7 +99,8 @@ function ResetZoom() {
 }
 
 /* Custom cluster icon sized by total MA */
-function createClusterIcon(cluster: L.MarkerCluster) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function createClusterIcon(cluster: any) {
   const markers = cluster.getAllChildMarkers();
   const count = markers.length;
   // Sum MA from marker options (stored as custom property)
