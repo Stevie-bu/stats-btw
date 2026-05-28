@@ -14,4 +14,7 @@ export const structure = (S: StructureBuilder) =>
             .id("betrieb-table")
             .component(BetriebTableList)
         ),
+      S.divider(),
+      S.documentTypeListItem("factsYear").title("Facts – Jahresdaten").icon(() => "📈"),
+      S.documentTypeListItem("factsDauer").title("Facts – Teilnahmedauer").icon(() => "🥧"),
     ]);

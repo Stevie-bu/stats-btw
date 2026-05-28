@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { sanityClient } from "@/lib/sanity";
 import { ComparePanel } from "@/components/ComparePanel";
+import Link from "next/link";
 
 /* ------------------------------------------------------------------ */
 /*  Types & Constants                                                  */
@@ -23,6 +24,7 @@ const METRICS = [
   "Beteiligung %",
   "Anzahl Teams",
   "Distanz",
+  "km pro MA",
   "Betriebsgrösse",
 ] as const;
 type Metric = (typeof METRICS)[number];
@@ -79,6 +81,8 @@ function getMetricValue(b: Betrieb, m: Metric): number {
       return Math.min(b.beteiligung ?? 0, 100);
     case "Distanz":
       return b.distanz ?? 0;
+    case "km pro MA":
+      return b.mitarbeitende > 0 ? Math.round((b.distanz ?? 0) / b.mitarbeitende) : 0;
   }
 }
 
@@ -115,6 +119,8 @@ function formatBarValue(v: number, m: Metric): string {
       return formatPercent(v);
     case "Distanz":
       return formatSwiss(v);
+    case "km pro MA":
+      return formatSwiss(v);
   }
 }
 
@@ -127,6 +133,8 @@ function metricUnit(m: Metric): string {
     case "Beteiligung %":
       return "%";
     case "Distanz":
+      return "km";
+    case "km pro MA":
       return "km";
   }
 }
@@ -294,31 +302,31 @@ export default function Home() {
       <header className="bg-brand-pink">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-16">
           <div className="flex items-center gap-4 px-0 sm:px-4 lg:px-8 py-4">
-            <div className="shrink-0 size-16 sm:size-20 lg:size-[116px]">
+            <Link href="/" className="shrink-0 size-16 sm:size-20 lg:size-[116px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/btw-logo.svg"
                 alt="bike to work"
                 className="size-full object-contain"
               />
-            </div>
+            </Link>
             <div className="flex flex-1 items-center gap-2 sm:gap-4">
               <nav className="flex flex-1 items-center justify-center gap-1 sm:gap-0">
                 {[
-                  { label: "Top Ten", active: true },
-                  { label: "Facts and Figures", active: false },
-                  { label: "Betriebsliste", active: false },
+                  { label: "Top Ten", href: "/", active: true },
+                  { label: "Facts and Figures", href: "/facts-and-figures", active: false },
                 ].map((item) => (
-                  <button
+                  <Link
                     key={item.label}
-                    className={`h-10 sm:h-12 rounded-full px-3 sm:px-5 lg:px-6 text-sm sm:text-base lg:text-xl font-medium whitespace-nowrap transition-colors ${
+                    href={item.href}
+                    className={`h-10 sm:h-12 rounded-full px-3 sm:px-5 lg:px-6 text-sm sm:text-base lg:text-xl font-medium whitespace-nowrap transition-colors flex items-center ${
                       item.active
                         ? "bg-black text-brand-white"
                         : "bg-brand-white text-black"
                     }`}
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
               </nav>
               <div className="hidden sm:flex items-center gap-1 text-base lg:text-xl font-medium text-black shrink-0">
@@ -505,7 +513,8 @@ export default function Home() {
             <div className="flex flex-col items-center">
               <div className="w-full max-w-[1120px]">
                 {/* ---- Metric Tabs (top, rectangular) ---- */}
-                <div className="flex w-full overflow-x-auto scrollbar-hide">
+                {/* Desktop: all in one row */}
+                <div className="hidden sm:flex w-full">
                   {METRICS.map((metric, i) => {
                     const isActive = activeMetric === metric;
                     const isFirst = i === 0;
@@ -515,15 +524,33 @@ export default function Home() {
                       <button
                         key={metric}
                         onClick={() => handleMetricChange(metric)}
-                        className={`flex-1 min-w-[100px] sm:min-w-0 overflow-hidden px-2 sm:px-4 pt-5 sm:pt-6 pb-2 sm:pb-3 text-center text-xs sm:text-sm lg:text-base font-bold whitespace-nowrap transition-colors ${
+                        className={`flex-1 overflow-hidden px-4 pt-6 pb-3 text-center text-sm lg:text-base font-bold whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-neutral-100"
                             : "border border-neutral-200 bg-white"
-                        } ${isFirst ? "rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px]" : ""} ${
-                          isLast
-                            ? "rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px]"
-                            : ""
+                        } ${isFirst ? "rounded-tl-[36px] lg:rounded-tl-[48px]" : ""} ${
+                          isLast ? "rounded-tr-[36px] lg:rounded-tr-[48px]" : ""
                         }`}
+                      >
+                        {metric}
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Mobile: stacked */}
+                <div className="flex flex-col sm:hidden w-full">
+                  {METRICS.map((metric, i) => {
+                    const isActive = activeMetric === metric;
+
+                    return (
+                      <button
+                        key={metric}
+                        onClick={() => handleMetricChange(metric)}
+                        className={`overflow-hidden px-2 pt-4 pb-2 text-center text-sm font-bold whitespace-nowrap transition-colors ${
+                          isActive
+                            ? "bg-neutral-100"
+                            : "border border-neutral-200 bg-white"
+                        } ${i === 0 ? "rounded-tl-[24px] rounded-tr-[24px]" : ""}`}
                       >
                         {metric}
                       </button>
@@ -534,8 +561,8 @@ export default function Home() {
                 {/* ---- Chart Card ---- */}
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl px-3 sm:px-5 lg:px-7 pb-6 sm:pb-8">
                   {/* Size Category Pills */}
-                  <div className="py-5 sm:py-6 lg:py-8">
-                    <div className="inline-flex rounded-full bg-white p-1 flex-wrap gap-1">
+                  <div className="py-4 sm:py-6 lg:py-8">
+                    <div className="grid grid-cols-2 lg:inline-flex lg:flex-row rounded-2xl lg:rounded-full bg-white p-1 gap-1">
                       {SIZE_CATEGORIES.map((size) => {
                         const isActive = searchActive
                           ? size === "Alle Betriebe"
@@ -547,7 +574,7 @@ export default function Home() {
                             key={size}
                             onClick={() => !disabled && handleSizeChange(size)}
                             disabled={disabled}
-                            className={`rounded-full px-3 sm:px-4 lg:px-[22px] py-2 sm:py-2.5 text-xs sm:text-sm lg:text-base font-bold whitespace-nowrap transition-colors ${
+                            className={`rounded-full px-3 sm:px-4 lg:px-[22px] py-2.5 sm:py-2.5 text-sm sm:text-sm lg:text-base font-bold whitespace-nowrap transition-colors ${
                               isActive
                                 ? "bg-brand-blue text-brand-white"
                                 : disabled
@@ -650,67 +677,64 @@ export default function Home() {
                             </div>
 
                             {/* Mobile row – stacked */}
-                            <div className="flex sm:hidden items-center gap-2">
-                              {/* Rank */}
-                              <p className="w-7 shrink-0 text-right font-[family-name:var(--font-display)] text-base italic uppercase leading-6 tracking-[1px] text-black">
-                                {String(rank + 1).padStart(2, "0")}
-                              </p>
-
-                              {/* Name + bar stacked */}
-                              <div className="flex-1 min-w-0">
+                            <div className="flex sm:hidden flex-col gap-1">
+                              {/* Rank + Name on same line */}
+                              <div className="flex items-center gap-2 pl-3">
+                                <p className="shrink-0 font-[family-name:var(--font-display)] text-base italic uppercase leading-6 tracking-[1px] text-black">
+                                  {String(rank + 1).padStart(2, "0")}
+                                </p>
                                 <p
-                                  className={`text-xs truncate mb-0.5 ${isHighlighted ? "text-black font-bold" : "text-black"}`}
+                                  className={`text-xs truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
                                 >
                                   {betrieb.name}
                                 </p>
-                                <div className="h-7 relative">
-                                  <div className="absolute inset-0 bg-white rounded-full overflow-hidden">
-                                    <div
-                                      className={`h-full ${barColor} rounded-full transition-all duration-500 ease-out`}
-                                      style={{ width: `${barWidth}%` }}
-                                    />
-                                  </div>
-                                  {barWidth > 30 ? (
-                                    <div
-                                      className="absolute top-0 h-full flex items-center justify-end gap-1 px-3 transition-all duration-500 ease-out"
-                                      style={{
-                                        left: 0,
-                                        width: `${barWidth}%`,
-                                      }}
-                                    >
-                                      <span
-                                        className={`text-xs font-bold ${textColor} whitespace-nowrap`}
-                                      >
-                                        {formatBarValue(value, activeMetric)}
-                                      </span>
-                                      <span
-                                        className={`text-xs ${unitColor} whitespace-nowrap font-normal`}
-                                      >
-                                        {metricUnit(activeMetric)}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      className="absolute top-0 h-full flex items-center gap-1 pl-3"
-                                      style={{ left: `${barWidth}%` }}
-                                    >
-                                      <span className="text-xs font-bold text-black whitespace-nowrap">
-                                        {formatBarValue(value, activeMetric)}
-                                      </span>
-                                      <span className="text-xs text-black/75 whitespace-nowrap font-normal">
-                                        {metricUnit(activeMetric)}
-                                      </span>
-                                    </div>
-                                  )}
-
+                              </div>
+                              <div className="h-7 relative">
+                                <div className="absolute inset-0 bg-white rounded-full overflow-hidden">
+                                  <div
+                                    className={`h-full ${barColor} rounded-full transition-all duration-500 ease-out`}
+                                    style={{ width: `${barWidth}%` }}
+                                  />
                                 </div>
-                                {/* CO₂ info for Distanz metric (mobile) */}
-                                {activeMetric === "Distanz" && (
-                                  <p className="text-[10px] text-black/40 whitespace-nowrap mt-0.5">
-                                    {formatSwiss(betrieb.co2)} kg CO₂
-                                  </p>
+                                {barWidth > 30 ? (
+                                  <div
+                                    className="absolute top-0 h-full flex items-center justify-end gap-1 px-3 transition-all duration-500 ease-out"
+                                    style={{
+                                      left: 0,
+                                      width: `${barWidth}%`,
+                                    }}
+                                  >
+                                    <span
+                                      className={`text-xs font-bold ${textColor} whitespace-nowrap`}
+                                    >
+                                      {formatBarValue(value, activeMetric)}
+                                    </span>
+                                    <span
+                                      className={`text-xs ${unitColor} whitespace-nowrap font-normal`}
+                                    >
+                                      {metricUnit(activeMetric)}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="absolute top-0 h-full flex items-center gap-1 pl-3"
+                                    style={{ left: `${barWidth}%` }}
+                                  >
+                                    <span className="text-xs font-bold text-black whitespace-nowrap">
+                                      {formatBarValue(value, activeMetric)}
+                                    </span>
+                                    <span className="text-xs text-black/75 whitespace-nowrap font-normal">
+                                      {metricUnit(activeMetric)}
+                                    </span>
+                                  </div>
                                 )}
                               </div>
+                              {/* CO₂ info for Distanz metric (mobile) */}
+                              {activeMetric === "Distanz" && (
+                                <p className="text-[10px] text-black/40 whitespace-nowrap mt-0.5">
+                                  {formatSwiss(betrieb.co2)} kg CO₂
+                                </p>
+                              )}
                             </div>
                           </div>
                         );

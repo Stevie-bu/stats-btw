@@ -1,0 +1,15 @@
+{"_id": "facts-year-2025", "_type": "factsYear", "year": 2025, "teilnehmende": 108945, "wachstumTeilnehmende": "-0.1%", "betriebe": 3931, "wachstumBetriebe": "2.4%", "teams": 29815, "totalKm": 29180331, "co2": 4201968}
+{"_id": "facts-year-2024", "_type": "factsYear", "year": 2024, "teilnehmende": 109090, "wachstumTeilnehmende": "12%", "betriebe": 3840, "wachstumBetriebe": "18%"}
+{"_id": "facts-year-2023", "_type": "factsYear", "year": 2023, "teilnehmende": 97616, "wachstumTeilnehmende": "21%", "betriebe": 3249, "wachstumBetriebe": "15%"}
+{"_id": "facts-year-2022", "_type": "factsYear", "year": 2022, "teilnehmende": 80556, "wachstumTeilnehmende": "34%", "betriebe": 2829, "wachstumBetriebe": "32%"}
+{"_id": "facts-year-2021", "_type": "factsYear", "year": 2021, "teilnehmende": 60255, "wachstumTeilnehmende": "24%", "betriebe": 2150, "wachstumBetriebe": "16%"}
+{"_id": "facts-year-2020", "_type": "factsYear", "year": 2020, "teilnehmende": 48635, "wachstumTeilnehmende": "-32%", "betriebe": 1851, "wachstumBetriebe": "-23%"}
+{"_id": "facts-year-2019", "_type": "factsYear", "year": 2019, "teilnehmende": 71834, "wachstumTeilnehmende": "11%", "betriebe": 2397, "wachstumBetriebe": "13%"}
+{"_id": "facts-year-2018", "_type": "factsYear", "year": 2018, "teilnehmende": 64680, "wachstumTeilnehmende": "18%", "betriebe": 2114, "wachstumBetriebe": "12%"}
+{"_id": "facts-year-2017", "_type": "factsYear", "year": 2017, "teilnehmende": 54780, "wachstumTeilnehmende": "2%", "betriebe": 1885, "wachstumBetriebe": "6%"}
+{"_id": "facts-year-2016", "_type": "factsYear", "year": 2016, "teilnehmende": 53922, "wachstumTeilnehmende": "3%", "betriebe": 1773, "wachstumBetriebe": "6%"}
+{"_id": "facts-year-2015", "_type": "factsYear", "year": 2015, "teilnehmende": 52541, "wachstumTeilnehmende": "5%", "betriebe": 1665, "wachstumBetriebe": "1%"}
+{"_id": "facts-year-2014", "_type": "factsYear", "year": 2014, "teilnehmende": 50190, "wachstumTeilnehmende": "3%", "betriebe": 1651, "wachstumBetriebe": "3%"}
+{"_id": "facts-dauer-mai", "_type": "factsDauer", "label": "Mai", "anzahl": 291, "prozent": 7, "sortOrder": 1}
+{"_id": "facts-dauer-juni", "_type": "factsDauer", "label": "Juni", "anzahl": 1046, "prozent": 27, "sortOrder": 2}
+{"_id": "facts-dauer-mai-und-juni", "_type": "factsDauer", "label": "Mai & Juni", "anzahl": 2594, "prozent": 66, "sortOrder": 3}

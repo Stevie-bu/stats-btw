@@ -14,6 +14,7 @@ const COMPARE_METRICS = [
   { key: "teams" as const, label: "Anzahl Teams", unit: "Teams", format: formatSwiss },
   { key: "beteiligung" as const, label: "Beteiligung %", unit: "%", format: formatPercent },
   { key: "distanz" as const, label: "Distanz", unit: "km", format: formatSwiss },
+  { key: "kmProMa" as const, label: "km pro MA", unit: "km", format: formatSwiss },
 ];
 
 function formatSwiss(n: number): string {
@@ -48,6 +49,7 @@ function getValue(b: Betrieb, key: string): number {
     case "teams": return b.teams ?? 0;
     case "beteiligung": return Math.min(b.beteiligung ?? 0, 100);
     case "distanz": return b.distanz ?? 0;
+    case "kmProMa": return b.mitarbeitende > 0 ? Math.round((b.distanz ?? 0) / b.mitarbeitende) : 0;
     default: return 0;
   }
 }
