@@ -108,12 +108,12 @@ function createClusterIcon(cluster: any) {
   for (const m of markers) {
     totalMa += (m.options as unknown as { ma?: number }).ma || 0;
   }
-  // Size: log scale of total MA, min 30px, max 70px
+  // Size: log scale of total MA, min 9px, max 45px (50% smaller)
   const logMa = Math.log10(Math.max(totalMa, 1));
-  const size = Math.round(Math.min(Math.max(30 + (logMa / 6) * 40, 30), 70));
+  const size = Math.round(Math.min(Math.max(9 + (logMa / 6) * 36, 9), 45));
   const innerSize = Math.round(size * 0.75);
   const offset = Math.round((size - innerSize) / 2);
-  const fontSize = size < 40 ? 11 : size < 55 ? 13 : 15;
+  const fontSize = 10;
 
   return L.divIcon({
     html: `<div style="width:${innerSize}px;height:${innerSize}px;margin:${offset}px;border-radius:50%;background:rgba(250,127,223,0.85);color:white;font-weight:700;font-size:${fontSize}px;display:flex;align-items:center;justify-content:center;line-height:1">${count}</div>`,

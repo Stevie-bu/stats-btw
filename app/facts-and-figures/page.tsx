@@ -1,18 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { sanityClient } from "@/lib/sanity";
 import Link from "next/link";
-
-const SwissMap = lazy(() =>
-  import("@/components/SwissMap").then((m) => ({ default: m.SwissMap }))
-);
-const ChoroplethMap = lazy(() =>
-  import("@/components/ChoroplethMap").then((m) => ({ default: m.ChoroplethMap }))
-);
-const DensityMap = lazy(() =>
-  import("@/components/DensityMap").then((m) => ({ default: m.DensityMap }))
-);
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -159,6 +149,7 @@ export default function FactsAndFigures() {
                 {[
                   { label: "Top Ten", href: "/", active: false },
                   { label: "Facts and Figures", href: "/facts-and-figures", active: true },
+                  { label: "Maps", href: "/maps", active: false },
                 ].map((item) => (
                   <Link
                     key={item.label}
@@ -395,45 +386,6 @@ export default function FactsAndFigures() {
                   </div>
                 );
               })()}
-
-              {/* ---- Swiss Map: Betriebe ---- */}
-              <div className="w-full max-w-[1120px]">
-                <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                  <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    Teilnehmende Betriebe in der Schweiz
-                  </h2>
-                  <Suspense fallback={<div className="w-full h-[400px] sm:h-[500px] bg-neutral-200 rounded-2xl animate-pulse" />}>
-                    <SwissMap />
-                  </Suspense>
-                </div>
-              </div>
-
-              {/* ---- Choropleth: Beteiligung pro Gemeinde ---- */}
-              <div className="w-full max-w-[1120px]">
-                <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                  <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    Beteiligung nach Gemeinde
-                  </h2>
-                  <Suspense fallback={<div className="w-full h-[400px] sm:h-[500px] bg-neutral-200 rounded-2xl animate-pulse" />}>
-                    <ChoroplethMap />
-                  </Suspense>
-                </div>
-              </div>
-
-              {/* ---- Density Map: Betriebe pro Einwohner ---- */}
-              <div className="w-full max-w-[1120px]">
-                <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                  <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-2 sm:mb-3">
-                    Potenzial pro Gemeinde
-                  </h2>
-                  <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
-                    Basierend auf Bevölkerungsdichte und erwartetem Anteil teilnehmender Betriebe. Dunkelblau = ausgeschöpft, Pink = ungenutztes Potenzial.
-                  </p>
-                  <Suspense fallback={<div className="w-full h-[400px] sm:h-[500px] bg-neutral-200 rounded-2xl animate-pulse" />}>
-                    <DensityMap />
-                  </Suspense>
-                </div>
-              </div>
 
               {/* ---- Pie Chart: Teilnahmedauer ---- */}
               <div className="w-full max-w-[1120px]">

@@ -1,0 +1,201 @@
+"use client";
+
+import { lazy, Suspense } from "react";
+import Link from "next/link";
+
+const SwissMap = lazy(() =>
+  import("@/components/SwissMap").then((m) => ({ default: m.SwissMap }))
+);
+const ChoroplethMap = lazy(() =>
+  import("@/components/ChoroplethMap").then((m) => ({ default: m.ChoroplethMap }))
+);
+const DensityMap = lazy(() =>
+  import("@/components/DensityMap").then((m) => ({ default: m.DensityMap }))
+);
+const KantonBeteiligungMap = lazy(() =>
+  import("@/components/KantonBeteiligungMap").then((m) => ({ default: m.KantonBeteiligungMap }))
+);
+
+const mapFallback = (
+  <div className="w-full h-[400px] sm:h-[500px] bg-neutral-200 rounded-2xl animate-pulse" />
+);
+
+export default function MapsPage() {
+  return (
+    <div className="min-h-screen bg-white">
+      {/* ============ HEADER ============ */}
+      <header className="bg-brand-pink">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-16">
+          <div className="flex items-center gap-4 px-0 sm:px-4 lg:px-8 py-4">
+            <Link href="/" className="shrink-0 size-16 sm:size-20 lg:size-[116px]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/btw-logo.svg" alt="bike to work" className="size-full object-contain" />
+            </Link>
+            <div className="flex flex-1 items-center gap-2 sm:gap-4">
+              <nav className="flex flex-1 items-center justify-center gap-1 sm:gap-0">
+                {[
+                  { label: "Top Ten", href: "/", active: false },
+                  { label: "Facts and Figures", href: "/facts-and-figures", active: false },
+                  { label: "Maps", href: "/maps", active: true },
+                ].map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={`h-10 sm:h-12 rounded-full px-3 sm:px-5 lg:px-6 text-sm sm:text-base lg:text-xl font-medium whitespace-nowrap transition-colors flex items-center ${
+                      item.active ? "bg-black text-brand-white" : "bg-brand-white text-black"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="hidden sm:flex items-center gap-1 text-base lg:text-xl font-medium text-black shrink-0">
+                <span>DE</span>
+                <svg width="12" height="6" viewBox="0 0 12 6" fill="none" className="mt-0.5">
+                  <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* ============ MAIN ============ */}
+      <main>
+        <div className="bg-brand-pink">
+          <div className="h-10 sm:h-12 lg:h-16 rounded-t-[32px] sm:rounded-t-[48px] lg:rounded-t-[64px] bg-brand-white" />
+        </div>
+
+        <div className="bg-brand-white overflow-hidden px-4 sm:px-8 lg:px-16 pt-8 sm:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
+          {/* Title */}
+          <div className="flex flex-col items-center mb-10 sm:mb-14 lg:mb-16">
+            <h1 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[34px] lg:text-[40px] italic uppercase leading-[1.1] tracking-[1.25px] text-center">
+              <span className="text-black">Challenge 2026</span>
+              <br />
+              <span className="text-brand-blue">Kartenansichten</span>
+            </h1>
+          </div>
+
+          <div className="flex flex-col items-center gap-12 sm:gap-16 lg:gap-20">
+            {/* ---- Swiss Map: Betriebe ---- */}
+            <div className="w-full max-w-[1120px]">
+              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
+                  Teilnehmende Betriebe in der Schweiz
+                </h2>
+                <Suspense fallback={mapFallback}>
+                  <SwissMap />
+                </Suspense>
+              </div>
+            </div>
+
+            {/* ---- Choropleth: Beteiligung pro Gemeinde ---- */}
+            <div className="w-full max-w-[1120px]">
+              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
+                  Beteiligung nach Gemeinde
+                </h2>
+                <Suspense fallback={mapFallback}>
+                  <ChoroplethMap />
+                </Suspense>
+              </div>
+            </div>
+
+            {/* ---- Kanton Beteiligung ---- */}
+            <div className="w-full max-w-[1120px]">
+              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-2 sm:mb-3">
+                  Beteiligung nach Kanton
+                </h2>
+                <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
+                  Durchschnittliche Teilnahmequote der bike to work Betriebe pro Kanton.
+                </p>
+                <Suspense fallback={mapFallback}>
+                  <KantonBeteiligungMap />
+                </Suspense>
+              </div>
+            </div>
+
+            {/* ---- Density/Potential Map ---- */}
+            <div className="w-full max-w-[1120px]">
+              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-2 sm:mb-3">
+                  Potenzial pro Gemeinde
+                </h2>
+                <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
+                  Basierend auf Bevölkerungsdichte und erwartetem Anteil teilnehmender Betriebe. Dunkelblau = überperformt, Pink = ungenutztes Potenzial.
+                </p>
+                <Suspense fallback={mapFallback}>
+                  <DensityMap />
+                </Suspense>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-brand-blue">
+          <div className="h-10 sm:h-12 lg:h-16 rounded-b-[32px] sm:rounded-b-[48px] lg:rounded-b-[64px] bg-brand-white" />
+        </div>
+      </main>
+
+      {/* ============ FOOTER ============ */}
+      <footer>
+        <div className="bg-brand-blue">
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-16 py-6 sm:py-8">
+            <div className="px-0 sm:px-4 lg:px-8 flex flex-col gap-8 sm:gap-10 lg:gap-12">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <nav className="flex flex-wrap items-center gap-x-6 sm:gap-x-8 lg:gap-x-10 gap-y-2 text-base sm:text-lg lg:text-xl font-medium text-black">
+                  <a href="#" className="hover:opacity-80 transition-opacity">Über uns</a>
+                  <a href="#" className="hover:opacity-80 transition-opacity">Sponsoren</a>
+                  <a href="#" className="hover:opacity-80 transition-opacity">Kontakt</a>
+                  <a href="#" className="hover:opacity-80 transition-opacity">Newsletter</a>
+                </nav>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/images/facebook-icon.svg" alt="Facebook" className="size-8 sm:size-10" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/images/instagram-icon.svg" alt="Instagram" className="size-8 sm:size-10" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/images/linkedin-icon.svg" alt="LinkedIn" className="size-8 sm:size-10" />
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-6 sm:gap-8">
+                <div className="flex flex-col gap-2">
+                  <p className="text-xs sm:text-sm text-brand-white">eine Aktion von</p>
+                  <div className="pb-1 sm:pb-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/provelo-logo.svg" alt="Pro Velo" className="h-6 sm:h-8 w-auto" />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 sm:gap-3">
+                  <p className="text-xs sm:text-sm text-brand-white">Unterstützt durch</p>
+                  <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-8">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/veloplus-logo.svg" alt="Veloplus" className="h-8 sm:h-10 lg:h-12 w-auto" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/panter-logo.svg" alt="Panter" className="h-6 sm:h-7 lg:h-[34px] w-auto" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/suva-logo.svg" alt="Suva" className="h-4 sm:h-5 lg:h-[23px] w-auto" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/stromer-logo.svg" alt="Stromer" className="h-4 sm:h-5 lg:h-[21px] w-auto" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-black px-4 sm:px-8 py-3 sm:py-4">
+          <div className="mx-auto max-w-[1440px] px-0 sm:px-4 lg:px-16">
+            <div className="flex items-center justify-between">
+              <p className="text-sm sm:text-base text-neutral-lighter">© 2025 bike to work</p>
+              <div className="flex items-center gap-6 sm:gap-10 text-sm sm:text-base text-neutral-lighter">
+                <a href="#" className="hover:opacity-80 transition-opacity">AGB</a>
+                <a href="#" className="hover:opacity-80 transition-opacity">Datenschutz</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

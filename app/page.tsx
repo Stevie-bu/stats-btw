@@ -315,6 +315,7 @@ export default function Home() {
                 {[
                   { label: "Top Ten", href: "/", active: true },
                   { label: "Facts and Figures", href: "/facts-and-figures", active: false },
+                  { label: "Maps", href: "/maps", active: false },
                 ].map((item) => (
                   <Link
                     key={item.label}
