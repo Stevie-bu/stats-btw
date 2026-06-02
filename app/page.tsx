@@ -3,6 +3,8 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { sanityClient } from "@/lib/sanity";
 import { ComparePanel } from "@/components/ComparePanel";
+import { findDestination } from "@/lib/destinations";
+import mapData from "@/data/betriebe-map.json";
 import Link from "next/link";
 
 /* ------------------------------------------------------------------ */
@@ -758,6 +760,30 @@ export default function Home() {
                       </button>
                     </div>
                   )}
+
+                  {/* "Wie weit geradelt?" – only when a Betrieb is searched */}
+                  {searchActive && searchMatchIndex >= 0 && activeMetric === "Distanz" && (() => {
+                    const betrieb = ranked[searchMatchIndex];
+                    const mapEntry = (mapData as { name: string; lat: number; lon: number; plz: string; ort: string; ma: number }[])
+                      .find((m) => m.name === betrieb.name);
+                    if (!mapEntry || betrieb.distanz < 1) return null;
+                    const result = findDestination(mapEntry.lat, mapEntry.lon, betrieb.distanz, betrieb.name);
+                    if (!result) return null;
+
+                    return (
+                      <div className="mt-8 sm:mt-10 bg-white rounded-[16px] sm:rounded-[24px] p-5 sm:p-8">
+                        <p className="text-lg sm:text-xl lg:text-2xl text-black leading-relaxed">
+                          {result.sentence}
+                        </p>
+                        <div className="flex flex-wrap gap-4 sm:gap-6 mt-4 text-sm text-black/50">
+                          <span>{formatSwiss(Math.round(betrieb.distanz))} km total</span>
+                          <span>Ziel: {result.destination.name}</span>
+                          <span>Distanz zum Ziel: {formatSwiss(result.actualDistance)} km</span>
+                          {result.laps > 0 && <span>{result.laps}× um die Welt</span>}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
