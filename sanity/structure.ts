@@ -15,6 +15,15 @@ export const structure = (S: StructureBuilder) =>
             .component(BetriebTableList)
         ),
       S.divider(),
+      S.listItem()
+        .title("Facts & Figures – Seite")
+        .icon(() => "📊")
+        .child(
+          S.document()
+            .schemaType("factsPage")
+            .documentId("factsPage")
+            .title("Facts & Figures – Seite")
+        ),
       S.documentTypeListItem("factsYear").title("Facts – Jahresdaten").icon(() => "📈"),
       S.documentTypeListItem("factsDauer").title("Facts – Teilnahmedauer").icon(() => "🥧"),
       S.divider(),

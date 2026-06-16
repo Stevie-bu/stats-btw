@@ -162,6 +162,7 @@ export default function Home() {
   const [allData, setAllData] = useState<Betrieb[]>([]);
   const [loading, setLoading] = useState(true);
   const [mapsPublished, setMapsPublished] = useState(false);
+  const [factsPublished, setFactsPublished] = useState(false);
   const [activeMetric, setActiveMetric] = useState<Metric>("Beteiligung %");
   const [activeSize, setActiveSize] = useState<SizeCategory>("mehr 5\u2019000 MA");
   const [searchInput, setSearchInput] = useState("");
@@ -191,6 +192,9 @@ export default function Home() {
     });
     sanityClient.fetch<boolean | null>(`*[_id == "mapsPage"][0].published`).then((val) => {
       setMapsPublished(val === true);
+    });
+    sanityClient.fetch<boolean | null>(`*[_id == "factsPage"][0].published`).then((val) => {
+      setFactsPublished(val !== false);
     });
   }, []);
 
@@ -322,7 +326,7 @@ export default function Home() {
               <nav className="flex flex-1 items-center justify-center gap-1 sm:gap-0">
                 {[
                   { label: "Top Ten", href: "/", active: true },
-                  { label: "Facts and Figures", href: "/facts-and-figures", active: false },
+                  ...(factsPublished ? [{ label: "Facts and Figures", href: "/facts-and-figures", active: false }] : []),
                   ...(mapsPublished ? [{ label: "Maps", href: "/maps", active: false }] : []),
                 ].map((item) => (
                   <Link

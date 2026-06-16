@@ -34,6 +34,22 @@ const DAUER_QUERY = `*[_type == "factsDauer"] | order(sortOrder asc) {
   label, anzahl, prozent, sortOrder
 }`;
 
+const PAGE_QUERY = `*[_id == "factsPage"][0]{
+  published, title, titleLine2,
+  sectionTeilnehmende, sectionBetriebe, sectionErde, sectionCo2, sectionDauer
+}`;
+
+type FactsPageData = {
+  published?: boolean;
+  title?: string;
+  titleLine2?: string;
+  sectionTeilnehmende?: { title?: string };
+  sectionBetriebe?: { title?: string };
+  sectionErde?: { text?: string; suffix?: string };
+  sectionCo2?: { text?: string; co2PerFlight?: number };
+  sectionDauer?: { title?: string };
+} | null;
+
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -56,16 +72,21 @@ const PIE_COLORS = ["#fa7fdf", "#32a7ff", "#7efaf3", "#fcff66", "#000000"];
 export default function FactsAndFigures() {
   const [yearData, setYearData] = useState<YearData[]>([]);
   const [dauerData, setDauerData] = useState<DauerData[]>([]);
+  const [pageData, setPageData] = useState<FactsPageData>(null);
   const [loading, setLoading] = useState(true);
   const [mapsPublished, setMapsPublished] = useState(false);
+  const [factsPublished, setFactsPublished] = useState(true);
 
   useEffect(() => {
     Promise.all([
       sanityClient.fetch<YearData[]>(YEAR_QUERY),
       sanityClient.fetch<DauerData[]>(DAUER_QUERY),
-    ]).then(([years, dauer]) => {
+      sanityClient.fetch<FactsPageData>(PAGE_QUERY),
+    ]).then(([years, dauer, page]) => {
       setYearData(years);
       setDauerData(dauer);
+      setPageData(page);
+      setFactsPublished(page?.published !== false);
       setLoading(false);
     });
     sanityClient.fetch<boolean | null>(`*[_id == "mapsPage"][0].published`).then((val) => {
@@ -73,6 +94,19 @@ export default function FactsAndFigures() {
     });
   }, []);
 
+  if (!loading && !factsPublished) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+        <p className="text-black/50 text-xl">Diese Seite ist momentan nicht verfügbar.</p>
+        <a href="/" className="text-brand-blue underline hover:text-brand-blue/70">
+          Zurück zur Startseite
+        </a>
+        <meta name="robots" content="noindex, nofollow" />
+      </div>
+    );
+  }
+
+  const p = pageData;
   const maxTeilnehmende = Math.max(...yearData.map((y) => y.teilnehmende), 1);
 
   /* Pie chart SVG */
@@ -189,9 +223,9 @@ export default function FactsAndFigures() {
           {/* Title */}
           <div className="flex flex-col items-center mb-10 sm:mb-14 lg:mb-16">
             <h1 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[34px] lg:text-[40px] italic uppercase leading-[1.1] tracking-[1.25px] text-center">
-              <span className="text-black">Challenge 2026</span>
+              <span className="text-black">{p?.title || "Challenge 2026"}</span>
               <br />
-              <span className="text-brand-blue">Zahlen & Fakten</span>
+              <span className="text-brand-blue">{p?.titleLine2 || "Zahlen & Fakten"}</span>
             </h1>
           </div>
 
@@ -205,7 +239,7 @@ export default function FactsAndFigures() {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    Teilnehmende
+                    {p?.sectionTeilnehmende?.title || "Teilnehmende"}
                   </h2>
 
                   {/* Desktop: vertical bars */}
@@ -265,7 +299,7 @@ export default function FactsAndFigures() {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    Betriebe
+                    {p?.sectionBetriebe?.title || "Betriebe"}
                   </h2>
 
                   {/* Desktop: vertical bars */}
@@ -342,10 +376,10 @@ export default function FactsAndFigures() {
                         />
                         <div className="text-center sm:text-left">
                           <p className="font-[family-name:var(--font-display)] text-[48px] sm:text-[64px] lg:text-[80px] italic uppercase leading-none tracking-[1.25px] text-brand-blue">
-                            {formatSwiss(timesAround)}x
+                            {formatSwiss(timesAround)}{p?.sectionErde?.suffix || "x"}
                           </p>
                           <p className="text-base sm:text-lg lg:text-2xl text-black mt-2 sm:mt-3 lg:mt-4 leading-relaxed">
-                            So viele Male seid ihr um die Erde geradelt
+                            {p?.sectionErde?.text || "So viele Male seid ihr um die Erde geradelt"}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
                             {formatSwiss(totalKm)} km total
@@ -361,7 +395,7 @@ export default function FactsAndFigures() {
               {(() => {
                 const latestYear = yearData[yearData.length - 1];
                 const totalCo2 = latestYear?.co2 || 4201968;
-                const co2PerFlight = 1100;
+                const co2PerFlight = p?.sectionCo2?.co2PerFlight || 1100;
                 const flights = Math.floor(totalCo2 / co2PerFlight);
                 return (
                   <div className="w-full max-w-[1120px]">
@@ -379,7 +413,7 @@ export default function FactsAndFigures() {
                             {formatSwiss(flights)}
                           </p>
                           <p className="text-base sm:text-lg lg:text-2xl text-black mt-2 sm:mt-3 lg:mt-4 leading-relaxed">
-                            So viel CO₂ habt ihr eingespart – das entspricht so vielen Flügen Schweiz–New York
+                            {p?.sectionCo2?.text || "So viel CO₂ habt ihr eingespart – das entspricht so vielen Flügen Schweiz–New York"}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
                             {formatSwiss(totalCo2)} kg CO₂ total
@@ -395,7 +429,7 @@ export default function FactsAndFigures() {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    Teilnahmedauer
+                    {p?.sectionDauer?.title || "Teilnahmedauer"}
                   </h2>
                   <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-12 lg:gap-16">
                     {/* Pie */}

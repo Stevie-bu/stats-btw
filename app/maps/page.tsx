@@ -49,11 +49,15 @@ const boxClasses = "bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rou
 export default function MapsPage() {
   const [pageData, setPageData] = useState<MapsPageData>(undefined as unknown as MapsPageData);
   const [loading, setLoading] = useState(true);
+  const [factsPublished, setFactsPublished] = useState(false);
 
   useEffect(() => {
     sanityClient.fetch<MapsPageData>(QUERY).then((result) => {
       setPageData(result);
       setLoading(false);
+    });
+    sanityClient.fetch<boolean | null>(`*[_id == "factsPage"][0].published`).then((val) => {
+      setFactsPublished(val !== false);
     });
   }, []);
 
@@ -98,7 +102,7 @@ export default function MapsPage() {
               <nav className="flex flex-1 items-center justify-center gap-1 sm:gap-0">
                 {[
                   { label: "Top Ten", href: "/", active: false },
-                  { label: "Facts and Figures", href: "/facts-and-figures", active: false },
+                  ...(factsPublished ? [{ label: "Facts and Figures", href: "/facts-and-figures", active: false }] : []),
                   { label: "Maps", href: "/maps", active: true },
                 ].map((item) => (
                   <Link
