@@ -189,8 +189,8 @@ export default function Home() {
       setAllData(result);
       setLoading(false);
     });
-    sanityClient.fetch<string | null>(`*[_id == "mapsPage"][0]._id`).then((id) => {
-      setMapsPublished(!!id);
+    sanityClient.fetch<boolean | null>(`*[_id == "mapsPage"][0].published`).then((val) => {
+      setMapsPublished(val === true);
     });
   }, []);
 

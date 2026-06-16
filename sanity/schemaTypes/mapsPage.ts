@@ -7,6 +7,13 @@ export default defineType({
   icon: () => "🗺️",
   fields: [
     defineField({
+      name: "published",
+      title: "Seite veröffentlicht",
+      description: "Wenn deaktiviert, ist die Seite nicht aufrufbar und verschwindet aus der Navigation.",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
       name: "title",
       title: "Seitentitel (Zeile 1)",
       type: "string",

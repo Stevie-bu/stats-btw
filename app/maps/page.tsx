@@ -30,6 +30,7 @@ type MapSection = {
 
 type MapsPageData = {
   _id: string;
+  published?: boolean;
   title?: string;
   titleLine2?: string;
   mapBetriebe?: MapSection;
@@ -39,7 +40,7 @@ type MapsPageData = {
 } | null;
 
 const QUERY = `*[_id == "mapsPage"][0]{
-  _id, title, titleLine2,
+  _id, published, title, titleLine2,
   mapBetriebe, mapGemeinde, mapKanton, mapPotenzial
 }`;
 
@@ -64,7 +65,7 @@ export default function MapsPage() {
     );
   }
 
-  if (!pageData) {
+  if (!pageData || pageData.published === false) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
         <p className="text-black/50 text-xl">Diese Seite ist momentan nicht verfügbar.</p>
