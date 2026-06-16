@@ -17,4 +17,14 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.documentTypeListItem("factsYear").title("Facts – Jahresdaten").icon(() => "📈"),
       S.documentTypeListItem("factsDauer").title("Facts – Teilnahmedauer").icon(() => "🥧"),
+      S.divider(),
+      S.listItem()
+        .title("Maps-Seite")
+        .icon(() => "🗺️")
+        .child(
+          S.document()
+            .schemaType("mapsPage")
+            .documentId("mapsPage")
+            .title("Maps-Seite")
+        ),
     ]);

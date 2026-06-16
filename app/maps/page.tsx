@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { sanityClient } from "@/lib/sanity";
 
 const SwissMap = dynamic(() =>
   import("@/components/SwissMap").then((m) => m.SwissMap), { ssr: false }
@@ -21,7 +22,67 @@ const mapFallback = (
   <div className="w-full h-[400px] sm:h-[500px] bg-neutral-200 rounded-2xl animate-pulse" />
 );
 
+type MapSection = {
+  visible?: boolean;
+  title?: string;
+  description?: string;
+};
+
+type MapsPageData = {
+  _id: string;
+  title?: string;
+  titleLine2?: string;
+  mapBetriebe?: MapSection;
+  mapGemeinde?: MapSection;
+  mapKanton?: MapSection;
+  mapPotenzial?: MapSection;
+} | null;
+
+const QUERY = `*[_id == "mapsPage"][0]{
+  _id, title, titleLine2,
+  mapBetriebe, mapGemeinde, mapKanton, mapPotenzial
+}`;
+
+const boxClasses = "bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8";
+
 export default function MapsPage() {
+  const [pageData, setPageData] = useState<MapsPageData>(undefined as unknown as MapsPageData);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    sanityClient.fetch<MapsPageData>(QUERY).then((result) => {
+      setPageData(result);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p className="text-black/50 text-lg">Laden...</p>
+      </div>
+    );
+  }
+
+  if (!pageData) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+        <p className="text-black/50 text-xl">Diese Seite ist momentan nicht verfügbar.</p>
+        <Link href="/" className="text-brand-blue underline hover:text-brand-blue/70">
+          Zurück zur Startseite
+        </Link>
+        <meta name="robots" content="noindex, nofollow" />
+      </div>
+    );
+  }
+
+  const title = pageData.title || "Challenge 2026";
+  const titleLine2 = pageData.titleLine2 || "Kartenansichten";
+  const betriebe = pageData.mapBetriebe;
+  const gemeinde = pageData.mapGemeinde;
+  const kanton = pageData.mapKanton;
+  const potenzial = pageData.mapPotenzial;
+
   return (
     <div className="min-h-screen bg-white">
       {/* ============ HEADER ============ */}
@@ -71,66 +132,88 @@ export default function MapsPage() {
           {/* Title */}
           <div className="flex flex-col items-center mb-10 sm:mb-14 lg:mb-16">
             <h1 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[34px] lg:text-[40px] italic uppercase leading-[1.1] tracking-[1.25px] text-center">
-              <span className="text-black">Challenge 2026</span>
+              <span className="text-black">{title}</span>
               <br />
-              <span className="text-brand-blue">Kartenansichten</span>
+              <span className="text-brand-blue">{titleLine2}</span>
             </h1>
           </div>
 
           <div className="flex flex-col items-center gap-12 sm:gap-16 lg:gap-20">
             {/* ---- Swiss Map: Betriebe ---- */}
-            <div className="w-full max-w-[1120px]">
-              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                  Teilnehmende Betriebe in der Schweiz
-                </h2>
-                <Suspense fallback={mapFallback}>
-                  <SwissMap />
-                </Suspense>
+            {betriebe?.visible !== false && (
+              <div className="w-full max-w-[1120px]">
+                <div className={boxClasses}>
+                  <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
+                    {betriebe?.title || "Teilnehmende Betriebe in der Schweiz"}
+                  </h2>
+                  {betriebe?.description && (
+                    <p className="text-sm sm:text-base text-black/50 -mt-4 sm:-mt-6 mb-6 sm:mb-8">
+                      {betriebe.description}
+                    </p>
+                  )}
+                  <Suspense fallback={mapFallback}>
+                    <SwissMap />
+                  </Suspense>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* ---- Choropleth: Beteiligung pro Gemeinde ---- */}
-            <div className="w-full max-w-[1120px]">
-              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                  Beteiligung nach Gemeinde
-                </h2>
-                <Suspense fallback={mapFallback}>
-                  <ChoroplethMap />
-                </Suspense>
+            {gemeinde?.visible !== false && (
+              <div className="w-full max-w-[1120px]">
+                <div className={boxClasses}>
+                  <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${gemeinde?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
+                    {gemeinde?.title || "Beteiligung nach Gemeinde"}
+                  </h2>
+                  {gemeinde?.description && (
+                    <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
+                      {gemeinde.description}
+                    </p>
+                  )}
+                  <Suspense fallback={mapFallback}>
+                    <ChoroplethMap />
+                  </Suspense>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* ---- Kanton Beteiligung ---- */}
-            <div className="w-full max-w-[1120px]">
-              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-2 sm:mb-3">
-                  Beteiligung nach Kanton
-                </h2>
-                <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
-                  Trimmed Mean (10%) der Teilnahmequote pro Kanton. Die obersten und untersten 10% der Werte werden entfernt.
-                </p>
-                <Suspense fallback={mapFallback}>
-                  <KantonBeteiligungMap />
-                </Suspense>
+            {kanton?.visible !== false && (
+              <div className="w-full max-w-[1120px]">
+                <div className={boxClasses}>
+                  <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${kanton?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
+                    {kanton?.title || "Beteiligung nach Kanton"}
+                  </h2>
+                  {kanton?.description && (
+                    <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
+                      {kanton.description}
+                    </p>
+                  )}
+                  <Suspense fallback={mapFallback}>
+                    <KantonBeteiligungMap />
+                  </Suspense>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* ---- Density/Potential Map ---- */}
-            <div className="w-full max-w-[1120px]">
-              <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-2 sm:mb-3">
-                  Potenzial pro Gemeinde
-                </h2>
-                <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
-                  Basierend auf Bevölkerungsdichte und erwartetem Anteil teilnehmender Betriebe. Dunkelblau = überperformt, Pink = ungenutztes Potenzial.
-                </p>
-                <Suspense fallback={mapFallback}>
-                  <DensityMap />
-                </Suspense>
+            {potenzial?.visible !== false && (
+              <div className="w-full max-w-[1120px]">
+                <div className={boxClasses}>
+                  <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${potenzial?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
+                    {potenzial?.title || "Potenzial pro Gemeinde"}
+                  </h2>
+                  {potenzial?.description && (
+                    <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
+                      {potenzial.description}
+                    </p>
+                  )}
+                  <Suspense fallback={mapFallback}>
+                    <DensityMap />
+                  </Suspense>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -188,7 +271,7 @@ export default function MapsPage() {
         <div className="bg-black px-4 sm:px-8 py-3 sm:py-4">
           <div className="mx-auto max-w-[1440px] px-0 sm:px-4 lg:px-16">
             <div className="flex items-center justify-between">
-              <p className="text-sm sm:text-base text-neutral-lighter">© 2025 bike to work</p>
+              <p className="text-sm sm:text-base text-neutral-lighter">&copy; 2025 bike to work</p>
               <div className="flex items-center gap-6 sm:gap-10 text-sm sm:text-base text-neutral-lighter">
                 <a href="#" className="hover:opacity-80 transition-opacity">AGB</a>
                 <a href="#" className="hover:opacity-80 transition-opacity">Datenschutz</a>

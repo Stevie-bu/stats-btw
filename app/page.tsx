@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { sanityClient } from "@/lib/sanity";
-import { ComparePanel } from "@/components/ComparePanel";
+// import { ComparePanel } from "@/components/ComparePanel";
 import { findDestination } from "@/lib/destinations";
 import mapData from "@/data/betriebe-map.json";
 import Link from "next/link";
@@ -161,14 +161,17 @@ function getBarColor(rank: number): string {
 export default function Home() {
   const [allData, setAllData] = useState<Betrieb[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mapsPublished, setMapsPublished] = useState(false);
   const [activeMetric, setActiveMetric] = useState<Metric>("Beteiligung %");
   const [activeSize, setActiveSize] = useState<SizeCategory>("mehr 5\u2019000 MA");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
-  const [compareMode, setCompareMode] = useState(false);
-  const [compareSelection, setCompareSelection] = useState<Betrieb[]>([]);
+  // const [compareMode, setCompareMode] = useState(false);
+  // const [compareSelection, setCompareSelection] = useState<Betrieb[]>([]);
+  const compareMode = false;
+  const compareSelection: Betrieb[] = [];
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -186,6 +189,9 @@ export default function Home() {
       setAllData(result);
       setLoading(false);
     });
+    sanityClient.fetch<string | null>(`*[_id == "mapsPage"][0]._id`).then((id) => {
+      setMapsPublished(!!id);
+    });
   }, []);
 
   /* Search suggestions */
@@ -200,30 +206,30 @@ export default function Home() {
   }, [allData, searchInput, selectedNames]);
 
   function selectBetrieb(name: string) {
-    if (compareMode) {
-      const betrieb = allData.find((b) => b.name === name);
-      if (betrieb && compareSelection.length < 5 && !selectedNames.has(name)) {
-        setCompareSelection((prev) => [...prev, betrieb]);
-      }
-      setSearchInput("");
-      setShowSuggestions(false);
-    } else {
+    // if (compareMode) {
+    //   const betrieb = allData.find((b) => b.name === name);
+    //   if (betrieb && compareSelection.length < 5 && !selectedNames.has(name)) {
+    //     setCompareSelection((prev) => [...prev, betrieb]);
+    //   }
+    //   setSearchInput("");
+    //   setShowSuggestions(false);
+    // } else {
       setSearchInput(name);
       setSearchQuery(name);
       setShowSuggestions(false);
       setVisibleCount(10);
-    }
+    // }
   }
 
-  function removeFromCompare(name: string) {
-    setCompareSelection((prev) => {
-      const next = prev.filter((b) => b.name !== name);
-      if (next.length === 0) {
-        setCompareMode(false);
-      }
-      return next;
-    });
-  }
+  // function removeFromCompare(name: string) {
+  //   setCompareSelection((prev) => {
+  //     const next = prev.filter((b) => b.name !== name);
+  //     if (next.length === 0) {
+  //       setCompareMode(false);
+  //     }
+  //     return next;
+  //   });
+  // }
 
   function clearSearch() {
     setSearchInput("");
@@ -231,13 +237,13 @@ export default function Home() {
     setShowSuggestions(false);
   }
 
-  function enterCompareMode() {
-    setCompareMode(true);
-    setCompareSelection([]);
-    setSearchInput("");
-    setSearchQuery("");
-    setShowSuggestions(false);
-  }
+  // function enterCompareMode() {
+  //   setCompareMode(true);
+  //   setCompareSelection([]);
+  //   setSearchInput("");
+  //   setSearchQuery("");
+  //   setShowSuggestions(false);
+  // }
 
   /* Search logic */
   const searchActive = searchQuery.trim().length > 0;
@@ -317,7 +323,7 @@ export default function Home() {
                 {[
                   { label: "Top Ten", href: "/", active: true },
                   { label: "Facts and Figures", href: "/facts-and-figures", active: false },
-                  { label: "Maps", href: "/maps", active: false },
+                  ...(mapsPublished ? [{ label: "Maps", href: "/maps", active: false }] : []),
                 ].map((item) => (
                   <Link
                     key={item.label}
@@ -394,34 +400,19 @@ export default function Home() {
                   onChange={(e) => {
                     setSearchInput(e.target.value);
                     setShowSuggestions(true);
-                    if (!compareMode && e.target.value.trim() === "") {
+                    if (e.target.value.trim() === "") {
                       setSearchQuery("");
                     }
                   }}
                   onFocus={() => {
                     if (searchInput.trim().length > 0) setShowSuggestions(true);
                   }}
-                  placeholder={
-                    compareMode
-                      ? compareSelection.length >= 5
-                        ? "Maximum 5 Betriebe erreicht"
-                        : "Betrieb hinzufügen..."
-                      : "Betrieb suchen..."
-                  }
-                  disabled={compareMode && compareSelection.length >= 5}
+                  placeholder="Betrieb suchen..."
                   className="w-full h-[56px] sm:h-[64px] lg:h-[70px] rounded-full border border-black bg-white pl-14 sm:pl-16 pr-12 text-base sm:text-lg text-black placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-brand-blue disabled:opacity-50"
                 />
-                {searchInput && !compareMode && (
+                {searchInput && (
                   <button
                     onClick={clearSearch}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 text-black/50 hover:text-black text-xl z-10"
-                  >
-                    ✕
-                  </button>
-                )}
-                {searchInput && compareMode && (
-                  <button
-                    onClick={() => { setSearchInput(""); setShowSuggestions(false); }}
                     className="absolute right-6 top-1/2 -translate-y-1/2 text-black/50 hover:text-black text-xl z-10"
                   >
                     ✕
@@ -454,8 +445,8 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Compare pills */}
-              {compareMode && compareSelection.length > 0 && (
+              {/* Compare pills - disabled */}
+              {/* {compareMode && compareSelection.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {compareSelection.map((b) => (
                     <span
@@ -472,11 +463,11 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
 
-            {/* Vergleichen / Beenden button */}
-            {!compareMode ? (
+            {/* Vergleichen / Beenden button - disabled */}
+            {/* {!compareMode ? (
               <button
                 onClick={enterCompareMode}
                 className="text-sm sm:text-base font-medium text-brand-blue hover:text-brand-blue/70 underline transition-colors"
@@ -490,7 +481,7 @@ export default function Home() {
               >
                 Vergleichen beenden
               </button>
-            ) : null}
+            ) : null} */}
           </div>
 
           {/* Loading state */}
@@ -500,8 +491,8 @@ export default function Home() {
             </div>
           )}
 
-          {/* Compare Panel */}
-          {!loading && compareMode && (
+          {/* Compare Panel - disabled */}
+          {/* {!loading && compareMode && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-[24px] sm:rounded-[36px] lg:rounded-[48px] px-3 sm:px-5 lg:px-7 py-6 sm:py-8">
@@ -509,10 +500,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Stats Card */}
-          {!loading && !compareMode && (
+          {!loading && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-[1120px]">
                 {/* ---- Metric Tabs (top, rectangular) ---- */}

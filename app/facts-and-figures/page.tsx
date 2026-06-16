@@ -57,6 +57,7 @@ export default function FactsAndFigures() {
   const [yearData, setYearData] = useState<YearData[]>([]);
   const [dauerData, setDauerData] = useState<DauerData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mapsPublished, setMapsPublished] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -66,6 +67,9 @@ export default function FactsAndFigures() {
       setYearData(years);
       setDauerData(dauer);
       setLoading(false);
+    });
+    sanityClient.fetch<string | null>(`*[_id == "mapsPage"][0]._id`).then((id) => {
+      setMapsPublished(!!id);
     });
   }, []);
 
@@ -149,7 +153,7 @@ export default function FactsAndFigures() {
                 {[
                   { label: "Top Ten", href: "/", active: false },
                   { label: "Facts and Figures", href: "/facts-and-figures", active: true },
-                  { label: "Maps", href: "/maps", active: false },
+                  ...(mapsPublished ? [{ label: "Maps", href: "/maps", active: false }] : []),
                 ].map((item) => (
                   <Link
                     key={item.label}
