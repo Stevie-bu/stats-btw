@@ -24,12 +24,34 @@ export interface SiteTexts {
   navTopTen?: string;
   navFacts?: string;
   navMaps?: string;
+  topTenPublished?: boolean;
   topTenTitle?: string;
   topTenTitleLine2?: string;
   topTenDescription?: string;
   searchPlaceholder?: string;
   noResults?: string;
   loadMore?: string;
+  metricBeteiligung?: string;
+  metricTeams?: string;
+  metricDistanz?: string;
+  metricKmProMa?: string;
+  metricBetriebsgroesse?: string;
+  sizeAlle?: string;
+  sizeMehr5000?: string;
+  sizeBis5000?: string;
+  sizeBis1000?: string;
+  sizeBis500?: string;
+  sizeBis200?: string;
+  unitMa?: string;
+  unitTeams?: string;
+  unitPercent?: string;
+  unitKm?: string;
+  unitCo2?: string;
+  distanzKmTotal?: string;
+  distanzZiel?: string;
+  distanzZumZiel?: string;
+  distanzUmDieWelt?: string;
+  loadingText?: string;
   unavailableText?: string;
   backToHome?: string;
 }
@@ -78,9 +100,14 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
     `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
       aktiv,
       navTopTen, navFacts, navMaps,
+      topTenPublished,
       topTenTitle, topTenTitleLine2, topTenDescription,
       searchPlaceholder, noResults, loadMore,
-      unavailableText, backToHome
+      metricBeteiligung, metricTeams, metricDistanz, metricKmProMa, metricBetriebsgroesse,
+      sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
+      unitMa, unitTeams, unitPercent, unitKm, unitCo2,
+      distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
+      loadingText, unavailableText, backToHome
     }`,
     { sprache }
   );

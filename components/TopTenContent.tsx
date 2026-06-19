@@ -7,8 +7,9 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { findDestination } from "@/lib/destinations";
 import mapData from "@/data/betriebe-map.json";
+import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
-import { getTranslations } from "@/lib/i18n";
+import { getTranslations, getLocalizedPath } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Types & Constants                                                  */
@@ -149,26 +150,26 @@ function getBarColor(rank: number): string {
 export function TopTenContent({ locale }: { locale: Locale }) {
   const t = getTranslations(locale);
 
-  /* Translation helpers for internal constants */
+  /* Translation helpers – CMS overrides i18n fallback */
   function metricLabel(m: Metric): string {
     const map: Record<Metric, string> = {
-      "Beteiligung %": t.metrics.beteiligung,
-      "Anzahl Teams": t.metrics.teams,
-      "Distanz": t.metrics.distanz,
-      "km pro MA": t.metrics.kmProMa,
-      "Betriebsgrösse": t.metrics.betriebsgroesse,
+      "Beteiligung %": cmsTexts.metricBeteiligung || t.metrics.beteiligung,
+      "Anzahl Teams": cmsTexts.metricTeams || t.metrics.teams,
+      "Distanz": cmsTexts.metricDistanz || t.metrics.distanz,
+      "km pro MA": cmsTexts.metricKmProMa || t.metrics.kmProMa,
+      "Betriebsgrösse": cmsTexts.metricBetriebsgroesse || t.metrics.betriebsgroesse,
     };
     return map[m];
   }
 
   function sizeLabel(s: SizeCategory): string {
     const map: Record<SizeCategory, string> = {
-      "mehr 5’000 MA": t.sizes.mehr5000,
-      "bis 5’000 MA": t.sizes.bis5000,
-      "bis 1’000 MA": t.sizes.bis1000,
-      "bis 500 MA": t.sizes.bis500,
-      "bis 200 MA": t.sizes.bis200,
-      "Alle Betriebe": t.sizes.alle,
+      "mehr 5’000 MA": cmsTexts.sizeMehr5000 || t.sizes.mehr5000,
+      "bis 5’000 MA": cmsTexts.sizeBis5000 || t.sizes.bis5000,
+      "bis 1’000 MA": cmsTexts.sizeBis1000 || t.sizes.bis1000,
+      "bis 500 MA": cmsTexts.sizeBis500 || t.sizes.bis500,
+      "bis 200 MA": cmsTexts.sizeBis200 || t.sizes.bis200,
+      "Alle Betriebe": cmsTexts.sizeAlle || t.sizes.alle,
     };
     return map[s];
   }
@@ -176,15 +177,15 @@ export function TopTenContent({ locale }: { locale: Locale }) {
   function metricUnit(m: Metric): string {
     switch (m) {
       case "Betriebsgrösse":
-        return t.units.ma;
+        return cmsTexts.unitMa || t.units.ma;
       case "Anzahl Teams":
-        return t.units.teams;
+        return cmsTexts.unitTeams || t.units.teams;
       case "Beteiligung %":
-        return t.units.percent;
+        return cmsTexts.unitPercent || t.units.percent;
       case "Distanz":
-        return t.units.km;
+        return cmsTexts.unitKm || t.units.km;
       case "km pro MA":
-        return t.units.km;
+        return cmsTexts.unitKm || t.units.km;
     }
   }
 
@@ -220,7 +221,16 @@ export function TopTenContent({ locale }: { locale: Locale }) {
     });
     sanityClient
       .fetch<SiteTexts | null>(
-        `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{ topTenTitle, topTenTitleLine2, topTenDescription, searchPlaceholder, noResults, loadMore }`
+        `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{
+          topTenPublished,
+          topTenTitle, topTenTitleLine2, topTenDescription,
+          searchPlaceholder, noResults, loadMore,
+          metricBeteiligung, metricTeams, metricDistanz, metricKmProMa, metricBetriebsgroesse,
+          sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
+          unitMa, unitTeams, unitPercent, unitKm, unitCo2,
+          distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
+          loadingText, unavailableText, backToHome
+        }`
       )
       .then((r) => setCmsTexts(r || {}));
   }, [locale]);
@@ -329,6 +339,20 @@ export function TopTenContent({ locale }: { locale: Locale }) {
     setActiveSize(s);
     setVisibleCount(10);
     clearSearch();
+  }
+
+  const topTenPublished = cmsTexts.topTenPublished !== false;
+
+  if (!loading && !topTenPublished) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+        <p className="text-black/50 text-xl">{cmsTexts.unavailableText || t.common.unavailable}</p>
+        <Link href={getLocalizedPath("/", locale)} className="text-brand-blue underline hover:text-brand-blue/70">
+          {cmsTexts.backToHome || t.common.backToHome}
+        </Link>
+        <meta name="robots" content="noindex, nofollow" />
+      </div>
+    );
   }
 
   /* Resolved text (CMS overrides i18n) */
@@ -472,7 +496,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
           {/* Loading state */}
           {loading && (
             <div className="flex justify-center py-20">
-              <p className="text-black/50 text-lg">{t.common.loading}</p>
+              <p className="text-black/50 text-lg">{cmsTexts.loadingText || t.common.loading}</p>
             </div>
           )}
 
@@ -650,7 +674,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                               {/* CO₂ info for Distanz metric – outside bar */}
                               {activeMetric === "Distanz" && (
                                 <span className="shrink-0 text-xs md:text-sm text-black/40 whitespace-nowrap">
-                                  {formatSwiss(betrieb.co2)} {t.units.co2}
+                                  {formatSwiss(betrieb.co2)} {cmsTexts.unitCo2 || t.units.co2}
                                 </span>
                               )}
                             </div>
@@ -711,7 +735,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                               {/* CO₂ info for Distanz metric (mobile) */}
                               {activeMetric === "Distanz" && (
                                 <p className="text-[10px] text-black/40 whitespace-nowrap mt-0.5">
-                                  {formatSwiss(betrieb.co2)} {t.units.co2}
+                                  {formatSwiss(betrieb.co2)} {cmsTexts.unitCo2 || t.units.co2}
                                 </p>
                               )}
                             </div>
@@ -752,10 +776,10 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                           {result.sentence}
                         </p>
                         <div className="flex flex-wrap gap-4 sm:gap-6 mt-4 text-sm text-black/50">
-                          <span>{formatSwiss(Math.round(betrieb.distanz))} km total</span>
-                          <span>Ziel: {result.destination.name}</span>
-                          <span>Distanz zum Ziel: {formatSwiss(result.actualDistance)} km</span>
-                          {result.laps > 0 && <span>{result.laps}× um die Welt</span>}
+                          <span>{formatSwiss(Math.round(betrieb.distanz))} {cmsTexts.distanzKmTotal || "km total"}</span>
+                          <span>{cmsTexts.distanzZiel || "Ziel:"} {result.destination.name}</span>
+                          <span>{cmsTexts.distanzZumZiel || "Distanz zum Ziel:"} {formatSwiss(result.actualDistance)} km</span>
+                          {result.laps > 0 && <span>{result.laps}{cmsTexts.distanzUmDieWelt || "× um die Welt"}</span>}
                         </div>
                       </div>
                     );

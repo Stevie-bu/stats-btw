@@ -44,9 +44,9 @@ type FactsPageData = {
   titleLine2?: string;
   sectionTeilnehmende?: { title?: string };
   sectionBetriebe?: { title?: string };
-  sectionErde?: { text?: string; suffix?: string };
-  sectionCo2?: { text?: string; co2PerFlight?: number };
-  sectionDauer?: { title?: string };
+  sectionErde?: { text?: string; suffix?: string; kmTotalLabel?: string };
+  sectionCo2?: { text?: string; co2PerFlight?: number; co2TotalLabel?: string };
+  sectionDauer?: { title?: string; pieUnit?: string };
 } | null;
 
 /* ------------------------------------------------------------------ */
@@ -73,7 +73,10 @@ export function FactsContent({ locale }: { locale: Locale }) {
 
   const PAGE_QUERY = `*[_type == "factsPage" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{
   published, title, titleLine2,
-  sectionTeilnehmende, sectionBetriebe, sectionErde, sectionCo2, sectionDauer
+  sectionTeilnehmende, sectionBetriebe,
+  sectionErde { text, suffix, kmTotalLabel },
+  sectionCo2 { text, co2PerFlight, co2TotalLabel },
+  sectionDauer { title, pieUnit }
 }`;
 
   const [yearData, setYearData] = useState<YearData[]>([]);
@@ -343,7 +346,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
                             {p?.sectionErde?.text || t.facts.erdeText}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
-                            {formatSwiss(totalKm)} km total
+                            {formatSwiss(totalKm)} {p?.sectionErde?.kmTotalLabel || "km total"}
                           </p>
                         </div>
                       </div>
@@ -377,7 +380,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
                             {p?.sectionCo2?.text || t.facts.co2Text}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
-                            {formatSwiss(totalCo2)} kg CO₂ total
+                            {formatSwiss(totalCo2)} {p?.sectionCo2?.co2TotalLabel || "kg CO₂ total"}
                           </p>
                         </div>
                       </div>
@@ -411,7 +414,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
                               {d.label}
                             </p>
                             <p className="text-xs sm:text-sm text-black/50">
-                              {formatSwiss(d.anzahl)} Betriebe · {d.prozent}%
+                              {formatSwiss(d.anzahl)} {p?.sectionDauer?.pieUnit || t.facts.betriebe} · {d.prozent}%
                             </p>
                           </div>
                         </div>

@@ -12,39 +12,51 @@
 - **Font file:** `public/fonts/brandon-grotesque-black-italic.otf`
 
 ## Pages
-- **Homepage** (`/`) – Betriebe ranking page with interactive bar chart, search, and "Mehr laden"
+- **Top Ten** (`/`) – Betriebe ranking with interactive bar chart, search, and "Mehr laden"
+- **Facts & Figures** (`/facts-and-figures`) – Teilnehmende, Betriebe, Erdumdrehungen, CO₂, Teilnahmedauer
+- **Maps** (`/maps`) – Betriebe-Karte, Gemeinde, Kanton, Potenzial
+
+### Multi-Language
+- DE: Root-Pfad (`/`, `/maps`, `/facts-and-figures`)
+- FR, IT, EN: Unter `[locale]` (`/fr/`, `/it/maps`, `/en/facts-and-figures`)
+
+### Seiten aktivieren/deaktivieren
+Jede Seite hat einen "Veröffentlicht"-Schalter in Sanity (pro Sprache):
+- **Top Ten:** In "Seitentexte" → jeweilige Sprache → "Seite veröffentlicht"
+- **Facts & Figures:** In "Facts & Figures" → jeweilige Sprache → "Seite veröffentlicht"
+- **Maps:** In "Maps" → jeweilige Sprache → "Seite veröffentlicht"
+
+Deaktivierte Seiten verschwinden aus der Navigation und sind nicht von Google auffindbar.
+
+## Sanity CMS – Alle Texte editierbar
+
+### Seitentexte (pro Sprache)
+In Sanity unter "Seitentexte" → Sprache wählen:
+- **Navigation:** Tab-Labels (Top Ten, Facts and Figures, Maps)
+- **Top Ten Seite:** Titel, Untertitel, Beschreibungstext, Suchfeld, Buttons
+- **Metriken & Kategorien:** Tab-Labels (Beteiligung %, Anzahl Teams, etc.), Grössenkategorien, Einheiten
+- **Distanz-Feature:** Labels für km total, Ziel, Distanz zum Ziel, um die Welt
+- **Allgemein:** Ladetext, "Seite nicht verfügbar", "Zurück zur Startseite"
+
+### Facts & Figures (pro Sprache)
+- Seitentitel, Abschnittstitel
+- Erdumrundung: Text, Suffix, "km total"-Label
+- CO₂: Text, CO₂ pro Flug, "kg CO₂ total"-Label
+- Teilnahmedauer: Titel, Einheit in Legende ("Betriebe")
+
+### Maps (pro Sprache)
+- Seitentitel, Kartentitel, Beschreibungen
+- Sichtbarkeit pro Karte
+
+### Allgemeine Einstellungen
+- **Navigation:** Logo, Favicon
+- **Footer:** Social Links, Logos, Texte pro Sprache
 
 ## Data
-- Source: Excel Betriebsliste (3'931 Betriebe) exported to `data/betriebe.json`
+- Source: Excel Betriebsliste (3'931 Betriebe) in Sanity CMS
 - Fields per Betrieb: Name, Ort, Mitarbeitende, Teams, Beteiligung %, Veloanteil %, Distanz (km), CO₂ (kg)
 - Betriebe are auto-categorized by Mitarbeitende count
 - Values use Swiss number formatting (apostrophe as thousands separator)
-
-## Sections
-- **Header** – Pink background, bike to work logo, navigation tabs (Top Ten active, Facts and Figures, Betriebsliste), language selector (DE)
-- **Title** – "CHALLENGE 2026 / TOP 10 BETRIEBE" in Brandon Grotesque Black Italic
-- **Subtitle** – Beschreibungstext mit Aufforderung zur Suche
-- **Search** – Pill-shaped search input with magnifying glass icon, centered (max 560px)
-- **Metric Tabs (top, rectangular)** – Anzahl Teams, Beteiligung %, Velo %, Distanz
-- **Size Category Pills (inside card)** – Alle Betriebe, mehr 5'000 MA, bis 5'000 MA, bis 1'000 MA, bis 500 MA, bis 200 MA
-- **Bar Chart** – Horizontal bars, colors: 1st Pink, 2nd Turquoise, 3rd Lemon, rest Blue
-- **Distanz metric** – Shows CO₂ (kg) as additional info to the right of the km bar
-- **Search result** – Shows 4 before + matched Betrieb (black bar, white text) + 5 after
-- **Mehr laden Button** – Loads 10 more entries per click
-- **Footer** – Blue background, links, social icons, sponsor logos, copyright bar
-
-## Size Categories (auto-assigned by Mitarbeitende)
-- **Alle Betriebe** – No filter (all 3'931)
-- **mehr 5'000 MA** – Mitarbeitende > 5000 (34 Betriebe)
-- **bis 5'000 MA** – 1001–5000 (199 Betriebe)
-- **bis 1'000 MA** – 501–1000 (264 Betriebe)
-- **bis 500 MA** – 201–500 (619 Betriebe)
-- **bis 200 MA** – ≤200 (2'815 Betriebe)
-
-## Responsive Design
-- **Desktop (≥1024px):** Full 1440px layout matching Figma
-- **Tablet (640–1023px):** Condensed spacing, smaller fonts, narrower name column
-- **Mobile (<640px):** Company name stacked above bar, scrollable tabs
 
 ## Assets (in `/public/images/`)
 - `btw-logo.svg` – bike to work logo
@@ -52,6 +64,8 @@
 - `facebook-icon.svg`, `instagram-icon.svg`, `linkedin-icon.svg` – social icons
 - `provelo-logo.svg` – Pro Velo logo
 - `veloplus-logo.svg`, `panter-logo.svg`, `suva-logo.svg`, `stromer-logo.svg` – sponsor logos
+- `world-icon.svg` – Weltkugel (Facts page)
+- `statue-of-liberty-icon.svg` – Freiheitsstatue (Facts page)
 
 ## Recent Changes
 - 2026-05-22: Initial build from Figma design
@@ -60,8 +74,13 @@
 - 2026-05-22: Switched to real Brandon Grotesque Black Italic font
 - 2026-05-26: Bar colors per rank (1st pink, 2nd turquoise, 3rd lemon, rest blue)
 - 2026-05-26: Major rebuild: 3'931 Betriebe from Excel, swapped tabs, search, "Mehr laden", CO₂ on Distanz
+- 2026-06-19: All texts now editable via Sanity CMS (siteTexts, factsPage, mapsPage)
+- 2026-06-19: Page activate/deactivate toggle per language (noindex when deactivated)
+- 2026-06-19: Pre-filled all Sanity documents with current texts in DE/FR/IT/EN
 
 ## How to Customize
-- **Update data:** Replace `data/betriebe.json` (exported from Excel Betriebsliste)
+- **Texte ändern:** Im Sanity Studio unter "Seitentexte", "Facts & Figures" oder "Maps" die jeweilige Sprache öffnen
+- **Seite ein-/ausblenden:** "Seite veröffentlicht" Schalter in Sanity umschalten
+- **Sprache ein-/ausblenden:** "Sprache aktiv" in Seitentexte umschalten
+- **Update data:** Betriebsliste in Sanity Studio aktualisieren
 - **Change colors:** Edit CSS variables in `app/globals.css`
-- **Change year in title:** Edit the `<h1>` text in `app/page.tsx`

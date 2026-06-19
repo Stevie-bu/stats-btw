@@ -83,6 +83,13 @@ export default defineType({
           type: "string",
           initialValue: "x",
         }),
+        defineField({
+          name: "kmTotalLabel",
+          title: "Label: km total",
+          type: "string",
+          description: "Text unter der Zahl, z.B. «km total»",
+          initialValue: "km total",
+        }),
       ],
     }),
     defineField({
@@ -104,6 +111,13 @@ export default defineType({
           type: "number",
           initialValue: 1100,
         }),
+        defineField({
+          name: "co2TotalLabel",
+          title: "Label: CO₂ total",
+          type: "string",
+          description: "Text unter der Zahl, z.B. «kg CO₂ total»",
+          initialValue: "kg CO₂ total",
+        }),
       ],
     }),
     defineField({
@@ -116,6 +130,13 @@ export default defineType({
           title: "Titel",
           type: "string",
           initialValue: "Teilnahmedauer",
+        }),
+        defineField({
+          name: "pieUnit",
+          title: "Einheit in Legende",
+          type: "string",
+          description: "Text in der Pie-Chart-Legende, z.B. «Betriebe»",
+          initialValue: "Betriebe",
         }),
       ],
     }),

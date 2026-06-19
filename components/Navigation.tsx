@@ -21,16 +21,20 @@ export function Navigation({ locale, activePage }: NavigationProps) {
   const [cmsTexts, setCmsTexts] = useState<SiteTexts>({});
   const [navSettings, setNavSettings] = useState<NavigationSettings>({});
   const [activeLanguages, setActiveLanguages] = useState<string[]>(["de", "fr", "it", "en"]);
+  const [topTenPublished, setTopTenPublished] = useState(true);
   const [mapsPublished, setMapsPublished] = useState(false);
   const [factsPublished, setFactsPublished] = useState(false);
 
   useEffect(() => {
     sanityClient.fetch(
       `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
-        navTopTen, navFacts, navMaps
+        navTopTen, navFacts, navMaps, topTenPublished
       }`,
       { sprache: locale }
-    ).then((r: SiteTexts | null) => setCmsTexts(r || {}));
+    ).then((r: SiteTexts | null) => {
+      setCmsTexts(r || {});
+      setTopTenPublished(r?.topTenPublished !== false);
+    });
 
     sanityClient.fetch(
       `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0] {
@@ -63,7 +67,7 @@ export function Navigation({ locale, activePage }: NavigationProps) {
   const visibleLocales = locales.filter((l) => activeLanguages.includes(l));
 
   const navItems = [
-    { label: topTenLabel, href: getLocalizedPath("/", locale), active: activePage === "topTen" },
+    ...(topTenPublished ? [{ label: topTenLabel, href: getLocalizedPath("/", locale), active: activePage === "topTen" }] : []),
     ...(factsPublished ? [{ label: factsLabel, href: getLocalizedPath("/facts-and-figures", locale), active: activePage === "facts" }] : []),
     ...(mapsPublished ? [{ label: mapsLabel, href: getLocalizedPath("/maps", locale), active: activePage === "maps" }] : []),
   ];

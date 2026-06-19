@@ -28,6 +28,7 @@ export default defineType({
       initialValue: true,
     }),
 
+    // --- Navigation ---
     defineField({
       name: "navTopTen",
       title: "Navigation: Top Ten",
@@ -47,6 +48,15 @@ export default defineType({
       group: "navigation",
     }),
 
+    // --- Top Ten Seite ---
+    defineField({
+      name: "topTenPublished",
+      title: "Seite veröffentlicht",
+      description: "Wenn deaktiviert, ist die Top Ten Seite nicht aufrufbar und verschwindet aus der Navigation.",
+      type: "boolean",
+      initialValue: true,
+      group: "topTen",
+    }),
     defineField({
       name: "topTenTitle",
       title: "Titel (Zeile 1)",
@@ -85,6 +95,143 @@ export default defineType({
       group: "topTen",
     }),
 
+    // --- Metriken (Tab-Labels, Kategorien, Einheiten) ---
+    defineField({
+      name: "metricBeteiligung",
+      title: "Tab: Beteiligung",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "metricTeams",
+      title: "Tab: Teams",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "metricDistanz",
+      title: "Tab: Distanz",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "metricKmProMa",
+      title: "Tab: km pro Mitarbeitende",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "metricBetriebsgroesse",
+      title: "Tab: Betriebsgrösse",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeAlle",
+      title: "Kategorie: Alle Betriebe",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeMehr5000",
+      title: "Kategorie: mehr als 5'000",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeBis5000",
+      title: "Kategorie: bis 5'000",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeBis1000",
+      title: "Kategorie: bis 1'000",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeBis500",
+      title: "Kategorie: bis 500",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "sizeBis200",
+      title: "Kategorie: bis 200",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "unitMa",
+      title: "Einheit: Mitarbeitende",
+      type: "string",
+      description: "z.B. «MA» oder «collab.»",
+      group: "metriken",
+    }),
+    defineField({
+      name: "unitTeams",
+      title: "Einheit: Teams",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "unitPercent",
+      title: "Einheit: Prozent",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "unitKm",
+      title: "Einheit: Kilometer",
+      type: "string",
+      group: "metriken",
+    }),
+    defineField({
+      name: "unitCo2",
+      title: "Einheit: CO₂",
+      type: "string",
+      group: "metriken",
+    }),
+
+    // --- Distanz-Feature ---
+    defineField({
+      name: "distanzKmTotal",
+      title: "Label: km total",
+      type: "string",
+      description: "Text nach der Zahl, z.B. «km total»",
+      group: "distanz",
+    }),
+    defineField({
+      name: "distanzZiel",
+      title: "Label: Ziel",
+      type: "string",
+      description: "z.B. «Ziel:»",
+      group: "distanz",
+    }),
+    defineField({
+      name: "distanzZumZiel",
+      title: "Label: Distanz zum Ziel",
+      type: "string",
+      description: "z.B. «Distanz zum Ziel:»",
+      group: "distanz",
+    }),
+    defineField({
+      name: "distanzUmDieWelt",
+      title: "Label: um die Welt",
+      type: "string",
+      description: "Text nach der Zahl, z.B. «× um die Welt»",
+      group: "distanz",
+    }),
+
+    // --- Allgemein ---
+    defineField({
+      name: "loadingText",
+      title: "Ladetext",
+      type: "string",
+      description: "Wird angezeigt während Daten geladen werden",
+      group: "common",
+    }),
     defineField({
       name: "unavailableText",
       title: "Seite nicht verfügbar",
@@ -102,6 +249,8 @@ export default defineType({
   groups: [
     { name: "navigation", title: "Navigation" },
     { name: "topTen", title: "Top Ten Seite" },
+    { name: "metriken", title: "Metriken & Kategorien" },
+    { name: "distanz", title: "Distanz-Feature" },
     { name: "common", title: "Allgemein" },
   ],
   preview: {
