@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
 import { getTranslations } from "@/lib/i18n";
 import type { SiteSettings, FooterTexts } from "@/lib/sanity";
@@ -113,8 +114,7 @@ export function Footer({ locale }: FooterProps) {
                       aria-label={link.platform}
                     >
                       {link.iconUrl ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={link.iconUrl} alt="" className="size-8 sm:size-10" />
+                        <Image src={link.iconUrl} alt="" width={40} height={40} unoptimized className="size-8 sm:size-10" />
                       ) : (
                         <span className="size-8 sm:size-10 flex items-center justify-center text-black font-bold">
                           {link.platform.charAt(0)}
@@ -131,8 +131,7 @@ export function Footer({ locale }: FooterProps) {
                       rel="noopener noreferrer"
                       aria-label={link.platform}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={link.icon} alt="" className="size-8 sm:size-10" />
+                      <Image src={link.icon} alt="" width={40} height={40} unoptimized className="size-8 sm:size-10" />
                     </a>
                   ))
                 )}
@@ -146,13 +145,11 @@ export function Footer({ locale }: FooterProps) {
                 <div className="pb-1 sm:pb-2">
                   {actionByLogoUrl ? (
                     <a href={actionByUrl} target="_blank" rel="noopener noreferrer">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={actionByLogoUrl} alt="Organisation" className="h-6 sm:h-8 w-auto" />
+                      <Image src={actionByLogoUrl} alt="Organisation" width={120} height={32} unoptimized className="h-6 sm:h-8 w-auto" />
                     </a>
                   ) : (
                     <a href={actionByUrl} target="_blank" rel="noopener noreferrer">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/images/provelo-logo.svg" alt="Pro Velo" className="h-6 sm:h-8 w-auto" />
+                      <Image src="/images/provelo-logo.svg" alt="Pro Velo" width={120} height={32} unoptimized className="h-6 sm:h-8 w-auto" />
                     </a>
                   )}
                 </div>
@@ -166,15 +163,13 @@ export function Footer({ locale }: FooterProps) {
                         {s.url ? (
                           <a href={s.url} target="_blank" rel="noopener noreferrer">
                             {s.logoUrl ? (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img src={s.logoUrl} alt={s.name} className="h-5 sm:h-8 w-auto" />
+                              <Image src={s.logoUrl} alt={s.name} width={100} height={32} unoptimized className="h-5 sm:h-8 w-auto" />
                             ) : (
                               <span className="text-sm font-medium text-black">{s.name}</span>
                             )}
                           </a>
                         ) : s.logoUrl ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img src={s.logoUrl} alt={s.name} className="h-5 sm:h-8 w-auto" />
+                          <Image src={s.logoUrl} alt={s.name} width={100} height={32} unoptimized className="h-5 sm:h-8 w-auto" />
                         ) : (
                           <span className="text-sm font-medium text-black">{s.name}</span>
                         )}
@@ -182,8 +177,7 @@ export function Footer({ locale }: FooterProps) {
                     ))
                   ) : (
                     defaultSupporters.map((s) => (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img key={s.name} src={s.logo} alt={s.name} className="h-8 sm:h-10 lg:h-12 w-auto" />
+                      <Image key={s.name} src={s.logo} alt={s.name} width={120} height={48} unoptimized className="h-8 sm:h-10 lg:h-12 w-auto" />
                     ))
                   )}
                 </div>

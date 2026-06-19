@@ -26,6 +26,10 @@ export function Navigation({ locale, activePage }: NavigationProps) {
   const [factsPublished, setFactsPublished] = useState(false);
 
   useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
+  useEffect(() => {
     sanityClient.fetch(
       `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
         navTopTen, navFacts, navMaps, topTenPublished
