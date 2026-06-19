@@ -42,10 +42,23 @@ export function Navigation({ locale, activePage }: NavigationProps) {
 
     sanityClient.fetch(
       `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0] {
+        "faviconUrl": favicon.asset->url,
         "headerLogoUrl": headerLogo.asset->url,
         "headerLogoLink": headerLogoUrl
       }`
-    ).then((r: NavigationSettings | null) => setNavSettings(r || {}));
+    ).then((r: NavigationSettings | null) => {
+      setNavSettings(r || {});
+      if (r?.faviconUrl) {
+        let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+        if (!link) {
+          link = document.createElement("link");
+          link.rel = "icon";
+          document.head.appendChild(link);
+        }
+        link.href = r.faviconUrl;
+        link.type = "image/svg+xml";
+      }
+    });
 
     sanityClient.fetch<string[]>(
       `*[_type == "siteTexts" && !(_id in path("drafts.**")) && aktiv == true].sprache`
