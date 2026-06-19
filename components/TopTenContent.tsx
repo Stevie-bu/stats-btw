@@ -501,7 +501,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
           )}
 
           {/* No data state */}
-          {!loading && (allData.length === 0 || cmsTexts.topTenDataVisible === false) && (
+          {!loading && allData.length === 0 && (
             <div className="flex justify-center py-20">
               <p className="text-black/50 text-lg text-center">
                 {cmsTexts.noDataText || "Aktuell keine Statistiken verfügbar."}
@@ -510,7 +510,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
           )}
 
           {/* Stats Card */}
-          {!loading && allData.length > 0 && cmsTexts.topTenDataVisible !== false && (
+          {!loading && allData.length > 0 && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-[1120px]">
                 {/* ---- Metric Tabs (top, rectangular) ---- */}
