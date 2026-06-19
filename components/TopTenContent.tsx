@@ -222,14 +222,14 @@ export function TopTenContent({ locale }: { locale: Locale }) {
     sanityClient
       .fetch<SiteTexts | null>(
         `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{
-          topTenPublished,
+          topTenPublished, topTenDataVisible,
           topTenTitle, topTenTitleLine2, topTenDescription,
           searchPlaceholder, noResults, loadMore,
           metricBeteiligung, metricTeams, metricDistanz, metricKmProMa, metricBetriebsgroesse,
           sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
           unitMa, unitTeams, unitPercent, unitKm, unitCo2,
           distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
-          loadingText, unavailableText, backToHome
+          noDataText, loadingText, unavailableText, backToHome
         }`
       )
       .then((r) => setCmsTexts(r || {}));
