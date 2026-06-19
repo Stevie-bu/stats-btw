@@ -12,43 +12,41 @@ export const structure = (S: StructureBuilder) =>
   S.list()
     .title("Inhalt")
     .items([
+      // --- Top Ten ---
       S.listItem()
-        .title("Betriebsliste")
-        .icon(() => "📊")
-        .child(
-          S.component()
-            .title("Betriebsliste")
-            .id("betrieb-table")
-            .component(BetriebTableList)
-        ),
-
-      S.divider(),
-
-      // Seitentexte pro Sprache
-      S.listItem()
-        .title("Seitentexte")
-        .icon(() => "✏️")
+        .title("Top Ten")
+        .icon(() => "🏆")
         .child(
           S.list()
-            .title("Seitentexte nach Sprache")
-            .items(
-              languages.map((lang) =>
+            .title("Top Ten")
+            .items([
+              ...languages.map((lang) =>
                 S.listItem()
                   .title(lang.title)
                   .id(`texts-${lang.id}`)
                   .child(
                     S.documentList()
-                      .title(`Seitentexte – ${lang.title}`)
+                      .title(`Top Ten – ${lang.title}`)
                       .filter('_type == "siteTexts" && sprache == $sprache')
                       .params({ sprache: lang.id })
                   )
-              )
-            )
+              ),
+              S.divider(),
+              S.listItem()
+                .title("Betriebsliste")
+                .icon(() => "📊")
+                .child(
+                  S.component()
+                    .title("Betriebsliste")
+                    .id("betrieb-table")
+                    .component(BetriebTableList)
+                ),
+            ])
         ),
 
       S.divider(),
 
-      // Facts & Figures
+      // --- Facts & Figures ---
       S.listItem()
         .title("Facts & Figures")
         .icon(() => "📊")
@@ -58,7 +56,7 @@ export const structure = (S: StructureBuilder) =>
             .items([
               ...languages.map((lang) =>
                 S.listItem()
-                  .title(`Seite – ${lang.title}`)
+                  .title(lang.title)
                   .id(`facts-page-${lang.id}`)
                   .child(
                     S.documentList()
@@ -68,14 +66,18 @@ export const structure = (S: StructureBuilder) =>
                   )
               ),
               S.divider(),
-              S.documentTypeListItem("factsYear").title("Jahresdaten").icon(() => "📈"),
-              S.documentTypeListItem("factsDauer").title("Teilnahmedauer").icon(() => "🥧"),
+              S.documentTypeListItem("factsYear")
+                .title("Jahresdaten")
+                .icon(() => "📈"),
+              S.documentTypeListItem("factsDauer")
+                .title("Teilnahmedauer")
+                .icon(() => "🥧"),
             ])
         ),
 
       S.divider(),
 
-      // Maps
+      // --- Maps ---
       S.listItem()
         .title("Maps")
         .icon(() => "🗺️")
@@ -85,7 +87,7 @@ export const structure = (S: StructureBuilder) =>
             .items(
               languages.map((lang) =>
                 S.listItem()
-                  .title(`Seite – ${lang.title}`)
+                  .title(lang.title)
                   .id(`maps-page-${lang.id}`)
                   .child(
                     S.documentList()
@@ -99,13 +101,13 @@ export const structure = (S: StructureBuilder) =>
 
       S.divider(),
 
-      // Allgemeine Einstellungen
+      // --- Allgemein ---
       S.listItem()
-        .title("Allgemeine Einstellungen")
+        .title("Allgemein")
         .icon(() => "⚙️")
         .child(
           S.list()
-            .title("Allgemeine Einstellungen")
+            .title("Allgemein")
             .items([
               S.listItem()
                 .title("Navigation")

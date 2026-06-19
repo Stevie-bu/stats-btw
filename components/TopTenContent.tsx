@@ -222,7 +222,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
     sanityClient
       .fetch<SiteTexts | null>(
         `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{
-          topTenPublished, topTenDataVisible,
+          topTenPublished,
           topTenTitle, topTenTitleLine2, topTenDescription,
           searchPlaceholder, noResults, loadMore,
           metricBeteiligung, metricTeams, metricDistanz, metricKmProMa, metricBetriebsgroesse,
