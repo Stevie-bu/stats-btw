@@ -500,19 +500,17 @@ export function TopTenContent({ locale }: { locale: Locale }) {
             </div>
           )}
 
-          {/* Compare Panel - disabled */}
-          {/* {!loading && compareMode && (
-            <div className="flex flex-col items-center">
-              <div className="w-full max-w-[1120px]">
-                <div className="bg-neutral-100 rounded-[24px] sm:rounded-[36px] lg:rounded-[48px] px-3 sm:px-5 lg:px-7 py-6 sm:py-8">
-                  <ComparePanel selected={compareSelection} />
-                </div>
-              </div>
+          {/* No data state */}
+          {!loading && allData.length === 0 && (
+            <div className="flex justify-center py-20">
+              <p className="text-black/50 text-lg text-center">
+                {cmsTexts.noDataText || "Aktuell keine Statistiken verfügbar."}
+              </p>
             </div>
-          )} */}
+          )}
 
           {/* Stats Card */}
-          {!loading && (
+          {!loading && allData.length > 0 && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-[1120px]">
                 {/* ---- Metric Tabs (top, rectangular) ---- */}

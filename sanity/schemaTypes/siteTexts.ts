@@ -226,6 +226,13 @@ export default defineType({
 
     // --- Allgemein ---
     defineField({
+      name: "noDataText",
+      title: "Keine Statistiken verfügbar",
+      type: "string",
+      description: "Wird angezeigt wenn keine Betriebsdaten vorhanden sind (z.B. vor dem Launch)",
+      group: "common",
+    }),
+    defineField({
       name: "loadingText",
       title: "Ladetext",
       type: "string",

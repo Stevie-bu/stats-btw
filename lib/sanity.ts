@@ -51,6 +51,7 @@ export interface SiteTexts {
   distanzZiel?: string;
   distanzZumZiel?: string;
   distanzUmDieWelt?: string;
+  noDataText?: string;
   loadingText?: string;
   unavailableText?: string;
   backToHome?: string;
@@ -107,7 +108,7 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
       sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
       unitMa, unitTeams, unitPercent, unitKm, unitCo2,
       distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
-      loadingText, unavailableText, backToHome
+      noDataText, loadingText, unavailableText, backToHome
     }`,
     { sprache }
   );
