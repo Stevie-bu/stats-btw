@@ -67,6 +67,37 @@ In Sanity unter "Seitentexte" → Sprache wählen:
 - `world-icon.svg` – Weltkugel (Facts page)
 - `statue-of-liberty-icon.svg` – Freiheitsstatue (Facts page)
 
+## Architektur & Performance
+
+### ISR (Incremental Static Regeneration)
+- Alle Seiten werden beim Build statisch generiert
+- Automatische Revalidation alle **300 Sekunden** (5 Minuten)
+- On-Demand Revalidation per Webhook (`/api/revalidate` mit Secret)
+
+### Security Headers
+Alle Seiten (ausser `/studio`) erhalten:
+- `Strict-Transport-Security` (HSTS mit 2 Jahren, includeSubDomains, preload)
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+
+### SEO
+- `robots.txt` – erlaubt alles ausser `/studio/`
+- `sitemap.xml` – alle Seiten mit hreflang-Alternates pro Sprache
+- Open Graph & Twitter Card Tags pro Sprache
+- Dynamisches `lang`-Attribut auf `<html>` pro Sprache
+- `theme-color: #fa7fdf` (Brand Pink)
+
+### Error Handling
+- **404-Seite** (`app/not-found.tsx`) – "Diese Seite wurde nicht gefunden"
+- **500-Seite** (`app/error.tsx`) – "Ein Fehler ist aufgetreten" mit Retry-Button
+- **Global Error** (`app/global-error.tsx`) – Fallback bei kritischen Fehlern
+
+### Bilder
+- Footer-Bilder nutzen `next/image` mit `unoptimized` für SVGs
+- Sanity CDN als Remote-Pattern konfiguriert (`cdn.sanity.io`)
+
 ## Recent Changes
 - 2026-05-22: Initial build from Figma design
 - 2026-05-22: Added real data from Challenge 2025 PDF
@@ -77,6 +108,7 @@ In Sanity unter "Seitentexte" → Sprache wählen:
 - 2026-06-19: All texts now editable via Sanity CMS (siteTexts, factsPage, mapsPage)
 - 2026-06-19: Page activate/deactivate toggle per language (noindex when deactivated)
 - 2026-06-19: Pre-filled all Sanity documents with current texts in DE/FR/IT/EN
+- 2026-06-19: ISR (300s), Security Headers, SEO (robots, sitemap, OG, hreflang), Error Pages, next/image
 
 ## How to Customize
 - **Texte ändern:** Im Sanity Studio unter "Seitentexte", "Facts & Figures" oder "Maps" die jeweilige Sprache öffnen
