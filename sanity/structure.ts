@@ -21,57 +21,132 @@ export const structure = (S: StructureBuilder) =>
             .id("betrieb-table")
             .component(BetriebTableList)
         ),
+
       S.divider(),
+
+      // Seitentexte pro Sprache
       S.listItem()
-        .title("Facts & Figures – Seite")
-        .icon(() => "📊")
-        .child(
-          S.document()
-            .schemaType("factsPage")
-            .documentId("factsPage")
-            .title("Facts & Figures – Seite")
-        ),
-      S.documentTypeListItem("factsYear").title("Facts – Jahresdaten").icon(() => "📈"),
-      S.documentTypeListItem("factsDauer").title("Facts – Teilnahmedauer").icon(() => "🥧"),
-      S.divider(),
-      S.listItem()
-        .title("Maps-Seite")
-        .icon(() => "🗺️")
-        .child(
-          S.document()
-            .schemaType("mapsPage")
-            .documentId("mapsPage")
-            .title("Maps-Seite")
-        ),
-      S.divider(),
-      S.listItem()
-        .title("Footer")
-        .icon(() => "🦶")
+        .title("Seitentexte")
+        .icon(() => "✏️")
         .child(
           S.list()
-            .title("Footer")
-            .items([
-              S.listItem()
-                .title("Einstellungen")
-                .icon(() => "⚙️")
-                .child(
-                  S.document()
-                    .schemaType("footerSettings")
-                    .documentId("footerSettings")
-                    .title("Footer Einstellungen")
-                ),
-              S.divider(),
-              ...languages.map((lang) =>
+            .title("Seitentexte nach Sprache")
+            .items(
+              languages.map((lang) =>
                 S.listItem()
-                  .title(`Texte – ${lang.title}`)
-                  .id(`footer-texts-${lang.id}`)
+                  .title(lang.title)
+                  .id(`texts-${lang.id}`)
                   .child(
                     S.documentList()
-                      .title(`Footer Texte – ${lang.title}`)
-                      .filter('_type == "footerTexts" && sprache == $sprache')
+                      .title(`Seitentexte – ${lang.title}`)
+                      .filter('_type == "siteTexts" && sprache == $sprache')
+                      .params({ sprache: lang.id })
+                  )
+              )
+            )
+        ),
+
+      S.divider(),
+
+      // Facts & Figures
+      S.listItem()
+        .title("Facts & Figures")
+        .icon(() => "📊")
+        .child(
+          S.list()
+            .title("Facts & Figures")
+            .items([
+              ...languages.map((lang) =>
+                S.listItem()
+                  .title(`Seite – ${lang.title}`)
+                  .id(`facts-page-${lang.id}`)
+                  .child(
+                    S.documentList()
+                      .title(`Facts & Figures – ${lang.title}`)
+                      .filter('_type == "factsPage" && sprache == $sprache')
                       .params({ sprache: lang.id })
                   )
               ),
+              S.divider(),
+              S.documentTypeListItem("factsYear").title("Jahresdaten").icon(() => "📈"),
+              S.documentTypeListItem("factsDauer").title("Teilnahmedauer").icon(() => "🥧"),
+            ])
+        ),
+
+      S.divider(),
+
+      // Maps
+      S.listItem()
+        .title("Maps")
+        .icon(() => "🗺️")
+        .child(
+          S.list()
+            .title("Maps")
+            .items(
+              languages.map((lang) =>
+                S.listItem()
+                  .title(`Seite – ${lang.title}`)
+                  .id(`maps-page-${lang.id}`)
+                  .child(
+                    S.documentList()
+                      .title(`Maps – ${lang.title}`)
+                      .filter('_type == "mapsPage" && sprache == $sprache')
+                      .params({ sprache: lang.id })
+                  )
+              )
+            )
+        ),
+
+      S.divider(),
+
+      // Allgemeine Einstellungen
+      S.listItem()
+        .title("Allgemeine Einstellungen")
+        .icon(() => "⚙️")
+        .child(
+          S.list()
+            .title("Allgemeine Einstellungen")
+            .items([
+              S.listItem()
+                .title("Navigation")
+                .icon(() => "🧭")
+                .child(
+                  S.document()
+                    .schemaType("navigationSettings")
+                    .documentId("navigationSettings")
+                    .title("Navigation")
+                ),
+              S.divider(),
+              S.listItem()
+                .title("Footer")
+                .icon(() => "🦶")
+                .child(
+                  S.list()
+                    .title("Footer")
+                    .items([
+                      S.listItem()
+                        .title("Einstellungen")
+                        .icon(() => "⚙️")
+                        .child(
+                          S.document()
+                            .schemaType("footerSettings")
+                            .documentId("footerSettings")
+                            .title("Footer Einstellungen")
+                        ),
+                      S.divider(),
+                      ...languages.map((lang) =>
+                        S.listItem()
+                          .title(`Texte – ${lang.title}`)
+                          .id(`footer-texts-${lang.id}`)
+                          .child(
+                            S.documentList()
+                              .title(`Footer Texte – ${lang.title}`)
+                              .filter('_type == "footerTexts" && sprache == $sprache')
+                              .params({ sprache: lang.id })
+                          )
+                      ),
+                    ])
+                ),
             ])
         ),
     ]);

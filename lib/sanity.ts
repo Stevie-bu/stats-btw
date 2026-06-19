@@ -15,6 +15,31 @@ export const sanityWriteClient = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
+/* ------------------------------------------------------------------ */
+/*  Types                                                              */
+/* ------------------------------------------------------------------ */
+
+export interface SiteTexts {
+  aktiv?: boolean;
+  navTopTen?: string;
+  navFacts?: string;
+  navMaps?: string;
+  topTenTitle?: string;
+  topTenTitleLine2?: string;
+  topTenDescription?: string;
+  searchPlaceholder?: string;
+  noResults?: string;
+  loadMore?: string;
+  unavailableText?: string;
+  backToHome?: string;
+}
+
+export interface NavigationSettings {
+  faviconUrl?: string;
+  headerLogoUrl?: string;
+  headerLogoLink?: string;
+}
+
 export interface SiteSettings {
   socialLinks?: Array<{
     platform: string;
@@ -42,6 +67,42 @@ export interface FooterTexts {
   termsUrl?: string;
   privacyLabel?: string;
   privacyUrl?: string;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Query functions                                                    */
+/* ------------------------------------------------------------------ */
+
+export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
+  const result = await sanityClient.fetch(
+    `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
+      aktiv,
+      navTopTen, navFacts, navMaps,
+      topTenTitle, topTenTitleLine2, topTenDescription,
+      searchPlaceholder, noResults, loadMore,
+      unavailableText, backToHome
+    }`,
+    { sprache }
+  );
+  return result || {};
+}
+
+export async function getNavigationSettings(): Promise<NavigationSettings> {
+  const result = await sanityClient.fetch(
+    `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0] {
+      "faviconUrl": favicon.asset->url,
+      "headerLogoUrl": headerLogo.asset->url,
+      "headerLogoLink": headerLogoUrl
+    }`
+  );
+  return result || {};
+}
+
+export async function getActiveLanguages(): Promise<string[]> {
+  const result = await sanityClient.fetch(
+    `*[_type == "siteTexts" && !(_id in path("drafts.**")) && aktiv == true].sprache`
+  );
+  return result && result.length > 0 ? result : ["de", "fr", "it", "en"];
 }
 
 export async function getFooterSettings(): Promise<SiteSettings> {

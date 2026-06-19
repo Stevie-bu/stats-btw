@@ -7,6 +7,20 @@ export default defineType({
   icon: () => "📊",
   fields: [
     defineField({
+      name: "sprache",
+      title: "Sprache",
+      type: "string",
+      options: {
+        list: [
+          { title: "Deutsch", value: "de" },
+          { title: "Français", value: "fr" },
+          { title: "Italiano", value: "it" },
+          { title: "English", value: "en" },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "published",
       title: "Seite veröffentlicht",
       description:
@@ -107,8 +121,15 @@ export default defineType({
     }),
   ],
   preview: {
-    prepare() {
-      return { title: "Facts & Figures – Seite" };
+    select: { sprache: "sprache" },
+    prepare({ sprache }) {
+      const labels: Record<string, string> = {
+        de: "Deutsch",
+        fr: "Français",
+        it: "Italiano",
+        en: "English",
+      };
+      return { title: `Facts & Figures – ${labels[sprache] || sprache}` };
     },
   },
 });
