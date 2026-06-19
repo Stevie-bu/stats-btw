@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { sanityClient } from "@/lib/sanity";
+import { Footer } from "@/components/Footer";
 import Link from "next/link";
 
 /* ------------------------------------------------------------------ */
@@ -469,63 +470,7 @@ export default function FactsAndFigures() {
       </main>
 
       {/* ============ FOOTER ============ */}
-      <footer>
-        <div className="bg-brand-blue">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-16 py-6 sm:py-8">
-            <div className="px-0 sm:px-4 lg:px-8 flex flex-col gap-8 sm:gap-10 lg:gap-12">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <nav className="flex flex-wrap items-center gap-x-6 sm:gap-x-8 lg:gap-x-10 gap-y-2 text-base sm:text-lg lg:text-xl font-medium text-black">
-                  <a href="#" className="hover:opacity-80 transition-opacity">Über uns</a>
-                  <a href="#" className="hover:opacity-80 transition-opacity">Sponsoren</a>
-                  <a href="#" className="hover:opacity-80 transition-opacity">Kontakt</a>
-                  <a href="#" className="hover:opacity-80 transition-opacity">Newsletter</a>
-                </nav>
-                <div className="flex items-center gap-3 sm:gap-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/facebook-icon.svg" alt="Facebook" className="size-8 sm:size-10" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/instagram-icon.svg" alt="Instagram" className="size-8 sm:size-10" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/linkedin-icon.svg" alt="LinkedIn" className="size-8 sm:size-10" />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row items-start justify-between gap-6 sm:gap-8">
-                <div className="flex flex-col gap-2">
-                  <p className="text-xs sm:text-sm text-brand-white">eine Aktion von</p>
-                  <div className="pb-1 sm:pb-2">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/provelo-logo.svg" alt="Pro Velo" className="h-6 sm:h-8 w-auto" />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 sm:gap-3">
-                  <p className="text-xs sm:text-sm text-brand-white">Unterstützt durch</p>
-                  <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-8">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/veloplus-logo.svg" alt="Veloplus" className="h-8 sm:h-10 lg:h-12 w-auto" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/panter-logo.svg" alt="Panter" className="h-6 sm:h-7 lg:h-[34px] w-auto" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/suva-logo.svg" alt="Suva" className="h-4 sm:h-5 lg:h-[23px] w-auto" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/stromer-logo.svg" alt="Stromer" className="h-4 sm:h-5 lg:h-[21px] w-auto" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-black px-4 sm:px-8 py-3 sm:py-4">
-          <div className="mx-auto max-w-[1440px] px-0 sm:px-4 lg:px-16">
-            <div className="flex items-center justify-between">
-              <p className="text-sm sm:text-base text-neutral-lighter">© 2025 bike to work</p>
-              <div className="flex items-center gap-6 sm:gap-10 text-sm sm:text-base text-neutral-lighter">
-                <a href="#" className="hover:opacity-80 transition-opacity">AGB</a>
-                <a href="#" className="hover:opacity-80 transition-opacity">Datenschutz</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer locale="de" />
     </div>
   );
 }
