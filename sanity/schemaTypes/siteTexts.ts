@@ -58,6 +58,14 @@ export default defineType({
       group: "topTen",
     }),
     defineField({
+      name: "topTenDataVisible",
+      title: "Statistiken anzeigen",
+      description: "Wenn deaktiviert, wird statt dem Ranking eine Meldung angezeigt (z.B. vor dem Launch).",
+      type: "boolean",
+      initialValue: true,
+      group: "topTen",
+    }),
+    defineField({
       name: "topTenTitle",
       title: "Titel (Zeile 1)",
       type: "string",

@@ -25,6 +25,7 @@ export interface SiteTexts {
   navFacts?: string;
   navMaps?: string;
   topTenPublished?: boolean;
+  topTenDataVisible?: boolean;
   topTenTitle?: string;
   topTenTitleLine2?: string;
   topTenDescription?: string;
@@ -101,7 +102,7 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
     `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
       aktiv,
       navTopTen, navFacts, navMaps,
-      topTenPublished,
+      topTenPublished, topTenDataVisible,
       topTenTitle, topTenTitleLine2, topTenDescription,
       searchPlaceholder, noResults, loadMore,
       metricBeteiligung, metricTeams, metricDistanz, metricKmProMa, metricBetriebsgroesse,
