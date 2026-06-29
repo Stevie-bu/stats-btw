@@ -229,7 +229,8 @@ export function TopTenContent({ locale }: { locale: Locale }) {
           sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
           unitMa, unitTeams, unitPercent, unitKm, unitCo2,
           distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
-          noDataText, loadingText, unavailableText, backToHome
+          noDataText, loadingText, unavailableText, backToHome,
+          error404Text, error404Link, error500Text, error500Button
         }`
       )
       .then((r) => setCmsTexts(r || {}));

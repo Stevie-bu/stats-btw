@@ -46,6 +46,12 @@ export const translations = {
       unavailable: "Diese Seite ist momentan nicht verfügbar.",
       backToHome: "Zurück zur Startseite",
     },
+    errors: {
+      notFoundText: "Diese Seite wurde nicht gefunden.",
+      notFoundLink: "Zurück zur Startseite",
+      errorText: "Ein Fehler ist aufgetreten.",
+      errorButton: "Erneut versuchen",
+    },
     maps: {
       title: "Challenge 2026",
       titleLine2: "Kartenansichten",
@@ -118,6 +124,12 @@ export const translations = {
       loading: "Chargement...",
       unavailable: "Cette page n'est pas disponible pour le moment.",
       backToHome: "Retour à la page d'accueil",
+    },
+    errors: {
+      notFoundText: "Cette page n'a pas été trouvée.",
+      notFoundLink: "Retour à la page d'accueil",
+      errorText: "Une erreur est survenue.",
+      errorButton: "Réessayer",
     },
     maps: {
       title: "Challenge 2026",
@@ -192,6 +204,12 @@ export const translations = {
       unavailable: "Questa pagina non è al momento disponibile.",
       backToHome: "Torna alla pagina iniziale",
     },
+    errors: {
+      notFoundText: "Questa pagina non è stata trovata.",
+      notFoundLink: "Torna alla pagina iniziale",
+      errorText: "Si è verificato un errore.",
+      errorButton: "Riprova",
+    },
     maps: {
       title: "Challenge 2026",
       titleLine2: "Mappe",
@@ -264,6 +282,12 @@ export const translations = {
       loading: "Loading...",
       unavailable: "This page is currently unavailable.",
       backToHome: "Back to home page",
+    },
+    errors: {
+      notFoundText: "This page was not found.",
+      notFoundLink: "Back to home page",
+      errorText: "An error has occurred.",
+      errorButton: "Try again",
     },
     maps: {
       title: "Challenge 2026",

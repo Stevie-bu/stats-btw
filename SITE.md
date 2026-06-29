@@ -109,6 +109,8 @@ Alle Seiten (ausser `/studio`) erhalten:
 - 2026-06-19: Page activate/deactivate toggle per language (noindex when deactivated)
 - 2026-06-19: Pre-filled all Sanity documents with current texts in DE/FR/IT/EN
 - 2026-06-19: ISR (300s), Security Headers, SEO (robots, sitemap, OG, hreflang), Error Pages, next/image
+- 2026-06-19: Sanity Studio v5 → v6 (inkl. @sanity/vision@6, @sanity/client@7.23, next-sanity@13.1)
+- 2026-06-19: Deploy-Workflow: Branch-Protection auf main, CI-Pipeline (Typecheck + Lint + Build), PR-Template
 
 ## How to Customize
 - **Texte ändern:** Im Sanity Studio unter "Seitentexte", "Facts & Figures" oder "Maps" die jeweilige Sprache öffnen
