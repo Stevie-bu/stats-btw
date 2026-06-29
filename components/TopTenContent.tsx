@@ -626,6 +626,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
 
                               {/* Name */}
                               <p
+                                title={betrieb.name}
                                 className={`w-[140px] md:w-[180px] lg:w-[220px] shrink-0 text-xs md:text-sm lg:text-base truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
                               >
                                 {betrieb.name}
@@ -686,6 +687,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                                   {String(rank + 1).padStart(2, "0")}
                                 </p>
                                 <p
+                                  title={betrieb.name}
                                   className={`text-xs truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
                                 >
                                   {betrieb.name}
