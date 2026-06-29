@@ -632,7 +632,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                                   {betrieb.name}
                                 </p>
                                 <div className="absolute left-0 bottom-full mb-1 hidden group-hover/name:block z-50 pointer-events-none">
-                                  <div className="bg-black text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap shadow-lg max-w-[320px]">
+                                  <div className="bg-black text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap shadow-lg">
                                     {betrieb.name}
                                   </div>
                                 </div>
@@ -692,18 +692,11 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                                 <p className="shrink-0 font-[family-name:var(--font-display)] text-base italic uppercase leading-6 tracking-[1px] text-black">
                                   {String(rank + 1).padStart(2, "0")}
                                 </p>
-                                <div className="min-w-0 flex-1 relative group/mname">
-                                  <p
-                                    className={`text-xs truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
-                                  >
-                                    {betrieb.name}
-                                  </p>
-                                  <div className="absolute left-0 bottom-full mb-1 hidden group-hover/mname:block z-50 pointer-events-none">
-                                    <div className="bg-black text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap shadow-lg max-w-[280px]">
-                                      {betrieb.name}
-                                    </div>
-                                  </div>
-                                </div>
+                                <p
+                                  className={`text-xs min-w-0 ${isHighlighted ? "text-black font-bold" : "text-black"}`}
+                                >
+                                  {betrieb.name}
+                                </p>
                               </div>
                               <div className="h-7 relative">
                                 <div className="absolute inset-0 bg-white rounded-full overflow-hidden">
