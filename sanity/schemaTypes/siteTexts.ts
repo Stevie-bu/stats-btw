@@ -252,6 +252,36 @@ export default defineType({
       type: "string",
       group: "common",
     }),
+
+    // --- Fehlerseiten ---
+    defineField({
+      name: "error404Text",
+      title: "404: Seite nicht gefunden",
+      type: "string",
+      description: "Text auf der 404-Fehlerseite",
+      group: "errors",
+    }),
+    defineField({
+      name: "error404Link",
+      title: "404: Link-Text",
+      type: "string",
+      description: "Text des Buttons auf der 404-Seite (z.B. «Zurück zur Startseite»)",
+      group: "errors",
+    }),
+    defineField({
+      name: "error500Text",
+      title: "500: Fehler aufgetreten",
+      type: "string",
+      description: "Text auf der 500-Fehlerseite",
+      group: "errors",
+    }),
+    defineField({
+      name: "error500Button",
+      title: "500: Button-Text",
+      type: "string",
+      description: "Text des Retry-Buttons auf der 500-Seite (z.B. «Erneut versuchen»)",
+      group: "errors",
+    }),
   ],
   groups: [
     { name: "navigation", title: "Navigation" },
@@ -259,6 +289,7 @@ export default defineType({
     { name: "metriken", title: "Metriken & Kategorien" },
     { name: "distanz", title: "Distanz-Feature" },
     { name: "common", title: "Allgemein" },
+    { name: "errors", title: "Fehlerseiten" },
   ],
   preview: {
     select: { sprache: "sprache" },

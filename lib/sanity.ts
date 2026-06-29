@@ -55,6 +55,10 @@ export interface SiteTexts {
   loadingText?: string;
   unavailableText?: string;
   backToHome?: string;
+  error404Text?: string;
+  error404Link?: string;
+  error500Text?: string;
+  error500Button?: string;
 }
 
 export interface NavigationSettings {
@@ -108,7 +112,8 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
       sizeAlle, sizeMehr5000, sizeBis5000, sizeBis1000, sizeBis500, sizeBis200,
       unitMa, unitTeams, unitPercent, unitKm, unitCo2,
       distanzKmTotal, distanzZiel, distanzZumZiel, distanzUmDieWelt,
-      noDataText, loadingText, unavailableText, backToHome
+      noDataText, loadingText, unavailableText, backToHome,
+      error404Text, error404Link, error500Text, error500Button
     }`,
     { sprache }
   );
