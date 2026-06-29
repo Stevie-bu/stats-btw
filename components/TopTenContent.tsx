@@ -625,12 +625,18 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                               </p>
 
                               {/* Name */}
-                              <p
-                                title={betrieb.name}
-                                className={`w-[140px] md:w-[180px] lg:w-[220px] shrink-0 text-xs md:text-sm lg:text-base truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
-                              >
-                                {betrieb.name}
-                              </p>
+                              <div className="w-[140px] md:w-[180px] lg:w-[220px] shrink-0 relative group/name">
+                                <p
+                                  className={`text-xs md:text-sm lg:text-base truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
+                                >
+                                  {betrieb.name}
+                                </p>
+                                <div className="absolute left-0 bottom-full mb-1 hidden group-hover/name:block z-50 pointer-events-none">
+                                  <div className="bg-black text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap shadow-lg max-w-[320px]">
+                                    {betrieb.name}
+                                  </div>
+                                </div>
+                              </div>
 
                               {/* Bar + Label */}
                               <div className="flex-1 h-9 md:h-10 lg:h-[44px] relative">
@@ -686,12 +692,18 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                                 <p className="shrink-0 font-[family-name:var(--font-display)] text-base italic uppercase leading-6 tracking-[1px] text-black">
                                   {String(rank + 1).padStart(2, "0")}
                                 </p>
-                                <p
-                                  title={betrieb.name}
-                                  className={`text-xs truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
-                                >
-                                  {betrieb.name}
-                                </p>
+                                <div className="min-w-0 flex-1 relative group/mname">
+                                  <p
+                                    className={`text-xs truncate ${isHighlighted ? "text-black font-bold" : "text-black"}`}
+                                  >
+                                    {betrieb.name}
+                                  </p>
+                                  <div className="absolute left-0 bottom-full mb-1 hidden group-hover/mname:block z-50 pointer-events-none">
+                                    <div className="bg-black text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap shadow-lg max-w-[280px]">
+                                      {betrieb.name}
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <div className="h-7 relative">
                                 <div className="absolute inset-0 bg-white rounded-full overflow-hidden">
