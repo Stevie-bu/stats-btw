@@ -7,7 +7,7 @@ import { sanityClient } from "@/lib/sanity";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import type { Locale } from "@/lib/i18n";
-import { getTranslations, getLocalizedPath } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/i18n";
 
 const SwissMap = dynamic(() =>
   import("@/components/SwissMap").then((m) => m.SwissMap), { ssr: false }
@@ -46,8 +46,6 @@ type MapsPageData = {
 const boxClasses = "bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8";
 
 export function MapsContent({ locale }: { locale: Locale }) {
-  const t = getTranslations(locale);
-
   const [pageData, setPageData] = useState<MapsPageData>(undefined as unknown as MapsPageData);
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +63,7 @@ export function MapsContent({ locale }: { locale: Locale }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-black/50 text-lg">{t.common.loading}</p>
+        <p className="text-black/50 text-lg"></p>
       </div>
     );
   }
@@ -73,17 +71,16 @@ export function MapsContent({ locale }: { locale: Locale }) {
   if (!pageData || pageData.published === false) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-        <p className="text-black/50 text-xl">{t.common.unavailable}</p>
+        <p className="text-black/50 text-xl"></p>
         <Link href={getLocalizedPath("/", locale)} className="text-brand-blue underline hover:text-brand-blue/70">
-          {t.common.backToHome}
         </Link>
         <meta name="robots" content="noindex, nofollow" />
       </div>
     );
   }
 
-  const title = pageData.title || t.maps.title;
-  const titleLine2 = pageData.titleLine2 || t.maps.titleLine2;
+  const title = pageData.title || "";
+  const titleLine2 = pageData.titleLine2 || "";
   const betriebe = pageData.mapBetriebe;
   const gemeinde = pageData.mapGemeinde;
   const kanton = pageData.mapKanton;
@@ -115,7 +112,7 @@ export function MapsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className={boxClasses}>
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    {betriebe?.title || t.maps.betriebe}
+                    {betriebe?.title || ""}
                   </h2>
                   {betriebe?.description && (
                     <p className="text-sm sm:text-base text-black/50 -mt-4 sm:-mt-6 mb-6 sm:mb-8">
@@ -134,7 +131,7 @@ export function MapsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className={boxClasses}>
                   <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${gemeinde?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
-                    {gemeinde?.title || t.maps.gemeinde}
+                    {gemeinde?.title || ""}
                   </h2>
                   {gemeinde?.description && (
                     <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
@@ -153,7 +150,7 @@ export function MapsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className={boxClasses}>
                   <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${kanton?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
-                    {kanton?.title || t.maps.kanton}
+                    {kanton?.title || ""}
                   </h2>
                   {kanton?.description && (
                     <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">
@@ -172,7 +169,7 @@ export function MapsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className={boxClasses}>
                   <h2 className={`font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black ${potenzial?.description ? "mb-2 sm:mb-3" : "mb-6 sm:mb-8"}`}>
-                    {potenzial?.title || t.maps.potenzial}
+                    {potenzial?.title || ""}
                   </h2>
                   {potenzial?.description && (
                     <p className="text-sm sm:text-base text-black/50 mb-6 sm:mb-8">

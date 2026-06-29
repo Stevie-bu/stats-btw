@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
-import { getTranslations, getLocalizedPath } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -69,8 +69,6 @@ const PIE_COLORS = ["#fa7fdf", "#32a7ff", "#7efaf3", "#fcff66", "#000000"];
 /* ------------------------------------------------------------------ */
 
 export function FactsContent({ locale }: { locale: Locale }) {
-  const t = getTranslations(locale);
-
   const PAGE_QUERY = `*[_type == "factsPage" && !(_id in path("drafts.**")) && sprache == "${locale}"][0]{
   published, title, titleLine2,
   sectionTeilnehmende, sectionBetriebe,
@@ -102,9 +100,8 @@ export function FactsContent({ locale }: { locale: Locale }) {
   if (!loading && !factsPublished) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-        <p className="text-black/50 text-xl">{t.common.unavailable}</p>
+        <p className="text-black/50 text-xl"></p>
         <Link href={getLocalizedPath("/", locale)} className="text-brand-blue underline hover:text-brand-blue/70">
-          {t.common.backToHome}
         </Link>
         <meta name="robots" content="noindex, nofollow" />
       </div>
@@ -187,15 +184,15 @@ export function FactsContent({ locale }: { locale: Locale }) {
           {/* Title */}
           <div className="flex flex-col items-center mb-10 sm:mb-14 lg:mb-16">
             <h1 className="font-[family-name:var(--font-display)] text-[28px] sm:text-[34px] lg:text-[40px] italic uppercase leading-[1.1] tracking-[1.25px] text-center">
-              <span className="text-black">{p?.title || t.facts.title}</span>
+              <span className="text-black">{p?.title || ""}</span>
               <br />
-              <span className="text-brand-blue">{p?.titleLine2 || t.facts.titleLine2}</span>
+              <span className="text-brand-blue">{p?.titleLine2 || ""}</span>
             </h1>
           </div>
 
           {loading ? (
             <div className="flex justify-center py-20">
-              <p className="text-black/50 text-lg">{t.common.loading}</p>
+              <p className="text-black/50 text-lg"></p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-12 sm:gap-16 lg:gap-20">
@@ -203,7 +200,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    {p?.sectionTeilnehmende?.title || t.facts.teilnehmende}
+                    {p?.sectionTeilnehmende?.title || ""}
                   </h2>
 
                   {/* Desktop: vertical bars */}
@@ -263,7 +260,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    {p?.sectionBetriebe?.title || t.facts.betriebe}
+                    {p?.sectionBetriebe?.title || ""}
                   </h2>
 
                   {/* Desktop: vertical bars */}
@@ -340,13 +337,13 @@ export function FactsContent({ locale }: { locale: Locale }) {
                         />
                         <div className="text-center sm:text-left">
                           <p className="font-[family-name:var(--font-display)] text-[48px] sm:text-[64px] lg:text-[80px] italic uppercase leading-none tracking-[1.25px] text-brand-blue">
-                            {formatSwiss(timesAround)}{p?.sectionErde?.suffix || t.facts.erdeSuffix}
+                            {formatSwiss(timesAround)}{p?.sectionErde?.suffix || ""}
                           </p>
                           <p className="text-base sm:text-lg lg:text-2xl text-black mt-2 sm:mt-3 lg:mt-4 leading-relaxed">
-                            {p?.sectionErde?.text || t.facts.erdeText}
+                            {p?.sectionErde?.text || ""}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
-                            {formatSwiss(totalKm)} {p?.sectionErde?.kmTotalLabel || "km total"}
+                            {formatSwiss(totalKm)} {p?.sectionErde?.kmTotalLabel || ""}
                           </p>
                         </div>
                       </div>
@@ -377,10 +374,10 @@ export function FactsContent({ locale }: { locale: Locale }) {
                             {formatSwiss(flights)}
                           </p>
                           <p className="text-base sm:text-lg lg:text-2xl text-black mt-2 sm:mt-3 lg:mt-4 leading-relaxed">
-                            {p?.sectionCo2?.text || t.facts.co2Text}
+                            {p?.sectionCo2?.text || ""}
                           </p>
                           <p className="text-sm sm:text-base text-black/50 mt-1">
-                            {formatSwiss(totalCo2)} {p?.sectionCo2?.co2TotalLabel || "kg CO₂ total"}
+                            {formatSwiss(totalCo2)} {p?.sectionCo2?.co2TotalLabel || ""}
                           </p>
                         </div>
                       </div>
@@ -393,7 +390,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
               <div className="w-full max-w-[1120px]">
                 <div className="bg-neutral-100 rounded-br-[24px] sm:rounded-br-[36px] lg:rounded-br-[48px] rounded-bl rounded-tr-[24px] sm:rounded-tr-[36px] lg:rounded-tr-[48px] rounded-tl-[24px] sm:rounded-tl-[36px] lg:rounded-tl-[48px] px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
                   <h2 className="font-[family-name:var(--font-display)] text-lg sm:text-xl lg:text-2xl italic uppercase tracking-[1px] text-black mb-6 sm:mb-8">
-                    {p?.sectionDauer?.title || t.facts.teilnahmedauer}
+                    {p?.sectionDauer?.title || ""}
                   </h2>
                   <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-12 lg:gap-16">
                     {/* Pie */}
@@ -414,7 +411,7 @@ export function FactsContent({ locale }: { locale: Locale }) {
                               {d.label}
                             </p>
                             <p className="text-xs sm:text-sm text-black/50">
-                              {formatSwiss(d.anzahl)} {p?.sectionDauer?.pieUnit || t.facts.betriebe} · {d.prozent}%
+                              {formatSwiss(d.anzahl)} {p?.sectionDauer?.pieUnit || ""} · {d.prozent}%
                             </p>
                           </div>
                         </div>

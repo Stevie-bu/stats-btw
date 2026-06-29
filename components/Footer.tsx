@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
-import { getTranslations } from "@/lib/i18n";
 import type { SiteSettings, FooterTexts } from "@/lib/sanity";
 import { getFooterSettings, getFooterTexts } from "@/lib/sanity";
 
@@ -60,19 +59,17 @@ export function Footer({ locale }: FooterProps) {
     getFooterTexts(locale).then(setFooterTexts);
   }, [locale]);
 
-  const t = getTranslations(locale);
-
   const menuItems = footerTexts.menuItems && footerTexts.menuItems.length > 0
     ? footerTexts.menuItems
     : defaultMenuItems[locale] || defaultMenuItems.de;
 
-  const actionByLabel = footerTexts.actionByLabel || t.footer.actionBy;
-  const supportedByLabel = footerTexts.supportedByLabel || t.footer.supportedBy;
-  const copyrightText = footerTexts.copyrightText || "© 2026 bike to work";
-  const termsLabel = footerTexts.termsLabel || t.footer.terms;
-  const termsUrl = footerTexts.termsUrl || "https://www.biketowork.ch";
-  const privacyLabel = footerTexts.privacyLabel || t.footer.privacy;
-  const privacyUrl = footerTexts.privacyUrl || "https://www.biketowork.ch";
+  const actionByLabel = footerTexts.actionByLabel || "";
+  const supportedByLabel = footerTexts.supportedByLabel || "";
+  const copyrightText = footerTexts.copyrightText || "";
+  const termsLabel = footerTexts.termsLabel || "";
+  const termsUrl = footerTexts.termsUrl || "";
+  const privacyLabel = footerTexts.privacyLabel || "";
+  const privacyUrl = footerTexts.privacyUrl || "";
 
   const socialLinks = siteSettings.socialLinks && siteSettings.socialLinks.length > 0
     ? siteSettings.socialLinks

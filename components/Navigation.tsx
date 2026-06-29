@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { Locale } from "@/lib/i18n";
-import { locales, getTranslations, getLocalizedPath } from "@/lib/i18n";
+import { locales, getLocalizedPath } from "@/lib/i18n";
 import { sanityClient } from "@/lib/sanity";
 import type { SiteTexts, NavigationSettings } from "@/lib/sanity";
 
@@ -14,7 +14,6 @@ interface NavigationProps {
 }
 
 export function Navigation({ locale, activePage }: NavigationProps) {
-  const t = getTranslations(locale);
   const pathname = usePathname();
   const [langOpen, setLangOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -77,9 +76,9 @@ export function Navigation({ locale, activePage }: NavigationProps) {
     ).then((val) => setFactsPublished(val !== false));
   }, [locale]);
 
-  const topTenLabel = cmsTexts.navTopTen || t.nav.topTen;
-  const factsLabel = cmsTexts.navFacts || t.nav.factsAndFigures;
-  const mapsLabel = cmsTexts.navMaps || t.nav.maps;
+  const topTenLabel = cmsTexts.navTopTen || "";
+  const factsLabel = cmsTexts.navFacts || "";
+  const mapsLabel = cmsTexts.navMaps || "";
 
   const visibleLocales = locales.filter((l) => activeLanguages.includes(l));
 
