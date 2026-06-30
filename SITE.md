@@ -111,6 +111,9 @@ Alle Seiten (ausser `/studio`) erhalten:
 - 2026-06-19: ISR (300s), Security Headers, SEO (robots, sitemap, OG, hreflang), Error Pages, next/image
 - 2026-06-19: Sanity Studio v5 → v6 (inkl. @sanity/vision@6, @sanity/client@7.23, next-sanity@13.1)
 - 2026-06-19: Deploy-Workflow: Branch-Protection auf main, CI-Pipeline (Typecheck + Lint + Build), PR-Template
+- 2026-06-29: Distanz-Sprüche nach Sanity CMS migriert (230 Sehenswürdigkeiten mit Koordinaten)
+- 2026-06-29: Übersetzungen für Präpositionen und Beschreibungen (DE/FR/IT/EN) in Sanity
+- 2026-06-30: Übersetzungen der Sehenswürdigkeiten-Namen in alle 4 Sprachen (nameFr, nameIt, nameEn)
 
 ## How to Customize
 - **Texte ändern:** Im Sanity Studio unter "Seitentexte", "Facts & Figures" oder "Maps" die jeweilige Sprache öffnen
