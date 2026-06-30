@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 import { AgentationProvider } from "@/components/AgentationProvider";
 import { sanityClient } from "@/lib/sanity";
@@ -63,16 +64,38 @@ export default async function RootLayout({
     `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0]{ headCode }`
   );
 
+  const scripts: Array<{ src?: string; content?: string }> = [];
+  if (settings?.headCode) {
+    const srcMatches = settings.headCode.matchAll(
+      /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*><\/script>/gi
+    );
+    for (const m of srcMatches) {
+      scripts.push({ src: m[1] });
+    }
+    const inlineMatches = settings.headCode.matchAll(
+      /<script\b[^>]*>([^<]+)<\/script>/gi
+    );
+    for (const m of inlineMatches) {
+      if (!m[0].includes("src=")) {
+        scripts.push({ content: m[1].trim() });
+      }
+    }
+  }
+
   return (
     <html lang="de" className={`${inter.variable} ${brandonGrotesque.variable}`}>
-      {settings?.headCode && (
-        <head>
-          <script dangerouslySetInnerHTML={{ __html: settings.headCode }} />
-        </head>
-      )}
       <body className="font-[family-name:var(--font-body)] antialiased">
         {children}
         <AgentationProvider />
+        {scripts.map((s, i) =>
+          s.src ? (
+            <Script key={i} src={s.src} strategy="afterInteractive" />
+          ) : (
+            <Script key={i} id={`head-code-${i}`} strategy="afterInteractive">
+              {s.content}
+            </Script>
+          )
+        )}
       </body>
     </html>
   );
