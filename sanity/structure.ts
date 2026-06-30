@@ -33,6 +33,15 @@ export const structure = (S: StructureBuilder) =>
               ),
               S.divider(),
               S.listItem()
+                .title("Sprüche")
+                .icon(() => "🌍")
+                .child(
+                  S.documentTypeList("distanceSaying")
+                    .title("Distanz-Sprüche")
+                    .defaultOrdering([{ field: "name", direction: "asc" }])
+                ),
+              S.divider(),
+              S.listItem()
                 .title("Betriebsliste")
                 .icon(() => "📊")
                 .child(

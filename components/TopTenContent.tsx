@@ -5,7 +5,7 @@ import { sanityClient } from "@/lib/sanity";
 import type { SiteTexts } from "@/lib/sanity";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { findDestination } from "@/lib/destinations";
+import { findDestination, type SanityDestination } from "@/lib/destinations";
 import mapData from "@/data/betriebe-map.json";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
@@ -195,6 +195,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
   const [cmsTexts, setCmsTexts] = useState<SiteTexts>({});
+  const [sanityDestinations, setSanityDestinations] = useState<SanityDestination[]>([]);
   // const [compareMode, setCompareMode] = useState(false);
   // const [compareSelection, setCompareSelection] = useState<Betrieb[]>([]);
   const compareMode = false;
@@ -231,6 +232,15 @@ export function TopTenContent({ locale }: { locale: Locale }) {
         }`
       )
       .then((r) => setCmsTexts(r || {}));
+    sanityClient
+      .fetch<SanityDestination[]>(
+        `*[_type == "distanceSaying" && !(_id in path("drafts.**"))]{
+          name, lat, lon,
+          prepositionDe, prepositionFr, prepositionIt,
+          descriptionDe, descriptionFr, descriptionIt
+        }`
+      )
+      .then((r) => setSanityDestinations(r || []));
   }, [locale]);
 
   /* Search suggestions */
@@ -769,7 +779,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
                     const mapEntry = (mapData as { name: string; lat: number; lon: number; plz: string; ort: string; ma: number }[])
                       .find((m) => m.name === betrieb.name);
                     if (!mapEntry || betrieb.distanz < 1) return null;
-                    const result = findDestination(mapEntry.lat, mapEntry.lon, betrieb.distanz, betrieb.name);
+                    const result = findDestination(mapEntry.lat, mapEntry.lon, betrieb.distanz, betrieb.name, sanityDestinations, locale);
                     if (!result) return null;
 
                     return (
