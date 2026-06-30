@@ -36,6 +36,13 @@ export default defineType({
     }),
     // Deutsch
     defineField({
+      name: "nameDe",
+      title: "Name",
+      type: "string",
+      description: "Übersetzter Name (falls abweichend vom Hauptnamen)",
+      fieldset: "de",
+    }),
+    defineField({
       name: "prepositionDe",
       title: "Präposition",
       type: "string",
@@ -50,6 +57,13 @@ export default defineType({
       fieldset: "de",
     }),
     // Français
+    defineField({
+      name: "nameFr",
+      title: "Nom",
+      type: "string",
+      description: "Nom traduit du lieu",
+      fieldset: "fr",
+    }),
     defineField({
       name: "prepositionFr",
       title: "Préposition",
@@ -66,6 +80,13 @@ export default defineType({
     }),
     // Italiano
     defineField({
+      name: "nameIt",
+      title: "Nome",
+      type: "string",
+      description: "Nome tradotto del luogo",
+      fieldset: "it",
+    }),
+    defineField({
       name: "prepositionIt",
       title: "Preposizione",
       type: "string",
@@ -80,6 +101,13 @@ export default defineType({
       fieldset: "it",
     }),
     // English
+    defineField({
+      name: "nameEn",
+      title: "Name",
+      type: "string",
+      description: "Translated name of the destination",
+      fieldset: "en",
+    }),
     defineField({
       name: "prepositionEn",
       title: "Preposition",

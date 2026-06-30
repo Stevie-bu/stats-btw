@@ -10,6 +10,9 @@ export interface SanityDestination {
   name: string;
   lat: number;
   lon: number;
+  nameFr?: string;
+  nameIt?: string;
+  nameEn?: string;
   prepositionDe?: string;
   prepositionFr?: string;
   prepositionIt?: string;
@@ -26,8 +29,15 @@ function toLocalized(d: SanityDestination, locale: Locale): Destination {
   const lang = locale;
   const preKey = `preposition${lang.charAt(0).toUpperCase()}${lang.slice(1)}` as keyof SanityDestination;
   const descKey = `description${lang.charAt(0).toUpperCase()}${lang.slice(1)}` as keyof SanityDestination;
+
+  let localName = d.name;
+  if (locale !== "de") {
+    const nameKey = `name${lang.charAt(0).toUpperCase()}${lang.slice(1)}` as keyof SanityDestination;
+    localName = (d[nameKey] as string) || d.name;
+  }
+
   return {
-    name: d.name,
+    name: localName,
     lat: d.lat,
     lon: d.lon,
     preposition: (d[preKey] as string) || d.prepositionDe || "",

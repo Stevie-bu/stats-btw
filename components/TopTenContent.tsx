@@ -236,6 +236,7 @@ export function TopTenContent({ locale }: { locale: Locale }) {
       .fetch<SanityDestination[]>(
         `*[_type == "distanceSaying" && !(_id in path("drafts.**"))]{
           name, lat, lon,
+          nameFr, nameIt, nameEn,
           prepositionDe, prepositionFr, prepositionIt, prepositionEn,
           descriptionDe, descriptionFr, descriptionIt, descriptionEn
         }`
