@@ -10,6 +10,7 @@ export default defineType({
     { name: "de", title: "🇩🇪 Deutsch", options: { collapsible: true } },
     { name: "fr", title: "🇫🇷 Français", options: { collapsible: true } },
     { name: "it", title: "🇮🇹 Italiano", options: { collapsible: true } },
+    { name: "en", title: "🇬🇧 English", options: { collapsible: true } },
   ],
   fields: [
     defineField({
@@ -77,6 +78,21 @@ export default defineType({
       type: "text",
       rows: 2,
       fieldset: "it",
+    }),
+    // English
+    defineField({
+      name: "prepositionEn",
+      title: "Preposition",
+      type: "string",
+      description: 'e.g. "to", "to the"',
+      fieldset: "en",
+    }),
+    defineField({
+      name: "descriptionEn",
+      title: "Description",
+      type: "text",
+      rows: 2,
+      fieldset: "en",
     }),
   ],
   preview: {

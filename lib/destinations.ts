@@ -13,15 +13,17 @@ export interface SanityDestination {
   prepositionDe?: string;
   prepositionFr?: string;
   prepositionIt?: string;
+  prepositionEn?: string;
   descriptionDe?: string;
   descriptionFr?: string;
   descriptionIt?: string;
+  descriptionEn?: string;
 }
 
 type Locale = "de" | "fr" | "it" | "en";
 
 function toLocalized(d: SanityDestination, locale: Locale): Destination {
-  const lang = locale === "en" ? "de" : locale;
+  const lang = locale;
   const preKey = `preposition${lang.charAt(0).toUpperCase()}${lang.slice(1)}` as keyof SanityDestination;
   const descKey = `description${lang.charAt(0).toUpperCase()}${lang.slice(1)}` as keyof SanityDestination;
   return {
