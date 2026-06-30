@@ -26,6 +26,13 @@ export default defineType({
       description: "URL hinter dem Logo (z.B. https://www.biketowork.ch)",
       validation: (Rule) => Rule.uri({ allowRelative: true, scheme: ["http", "https"] }),
     }),
+    defineField({
+      name: "headCode",
+      title: "Head Code (z.B. Google Tag Manager)",
+      type: "text",
+      rows: 8,
+      description: "Code-Snippet das im <head> jeder Seite eingefügt wird. Hier z.B. den Google Tag Manager Code einfügen.",
+    }),
   ],
   preview: {
     prepare() {

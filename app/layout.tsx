@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AgentationProvider } from "@/components/AgentationProvider";
+import { sanityClient } from "@/lib/sanity";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,13 +52,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export const revalidate = 300;
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await sanityClient.fetch<{ headCode?: string } | null>(
+    `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0]{ headCode }`
+  );
+
   return (
     <html lang="de" className={`${inter.variable} ${brandonGrotesque.variable}`}>
+      {settings?.headCode && (
+        <head>
+          <script dangerouslySetInnerHTML={{ __html: settings.headCode }} />
+        </head>
+      )}
       <body className="font-[family-name:var(--font-body)] antialiased">
         {children}
         <AgentationProvider />
