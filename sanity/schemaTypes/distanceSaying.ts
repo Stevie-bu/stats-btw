@@ -36,13 +36,6 @@ export default defineType({
     }),
     // Deutsch
     defineField({
-      name: "nameDe",
-      title: "Name",
-      type: "string",
-      description: "Übersetzter Name (falls abweichend vom Hauptnamen)",
-      fieldset: "de",
-    }),
-    defineField({
       name: "prepositionDe",
       title: "Präposition",
       type: "string",
