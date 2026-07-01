@@ -21,9 +21,6 @@ export const sanityWriteClient = createClient({
 
 export interface SiteTexts {
   aktiv?: boolean;
-  navTopTen?: string;
-  navFacts?: string;
-  navMaps?: string;
   topTenPublished?: boolean;
   topTenTitle?: string;
   topTenTitleLine2?: string;
@@ -65,6 +62,9 @@ export interface NavigationSettings {
   faviconUrl?: string;
   headerLogoUrl?: string;
   headerLogoLink?: string;
+  navTopTen?: string;
+  navFacts?: string;
+  navMaps?: string;
 }
 
 export interface SiteSettings {
@@ -104,7 +104,6 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
   const result = await sanityClient.fetch(
     `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
       aktiv,
-      navTopTen, navFacts, navMaps,
       topTenPublished,
       topTenTitle, topTenTitleLine2, topTenDescription,
       searchPlaceholder, noResults, loadMore,
@@ -120,12 +119,16 @@ export async function getSiteTexts(sprache: string): Promise<SiteTexts> {
   return result || {};
 }
 
-export async function getNavigationSettings(): Promise<NavigationSettings> {
+export async function getNavigationSettings(sprache: string = "de"): Promise<NavigationSettings> {
+  const suffix = sprache.charAt(0).toUpperCase() + sprache.slice(1);
   const result = await sanityClient.fetch(
     `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0] {
       "faviconUrl": favicon.asset->url,
       "headerLogoUrl": headerLogo.asset->url,
-      "headerLogoLink": headerLogoUrl
+      "headerLogoLink": headerLogoUrl,
+      "navTopTen": navTopTen${suffix},
+      "navFacts": navFacts${suffix},
+      "navMaps": navMaps${suffix}
     }`
   );
   return result || {};

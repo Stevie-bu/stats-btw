@@ -28,26 +28,6 @@ export default defineType({
       initialValue: true,
     }),
 
-    // --- Navigation ---
-    defineField({
-      name: "navTopTen",
-      title: "Navigation: Top Ten",
-      type: "string",
-      group: "navigation",
-    }),
-    defineField({
-      name: "navFacts",
-      title: "Navigation: Facts and Figures",
-      type: "string",
-      group: "navigation",
-    }),
-    defineField({
-      name: "navMaps",
-      title: "Navigation: Maps",
-      type: "string",
-      group: "navigation",
-    }),
-
     // --- Top Ten Seite ---
     defineField({
       name: "topTenPublished",
@@ -284,7 +264,6 @@ export default defineType({
     }),
   ],
   groups: [
-    { name: "navigation", title: "Navigation" },
     { name: "topTen", title: "Top Ten Seite" },
     { name: "metriken", title: "Metriken & Kategorien" },
     { name: "distanz", title: "Distanz-Feature" },

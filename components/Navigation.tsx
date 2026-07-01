@@ -31,7 +31,7 @@ export function Navigation({ locale, activePage }: NavigationProps) {
   useEffect(() => {
     sanityClient.fetch(
       `*[_type == "siteTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {
-        navTopTen, navFacts, navMaps, topTenPublished
+        topTenPublished
       }`,
       { sprache: locale }
     ).then((r: SiteTexts | null) => {
@@ -39,11 +39,15 @@ export function Navigation({ locale, activePage }: NavigationProps) {
       setTopTenPublished(r?.topTenPublished !== false);
     });
 
+    const suffix = locale.charAt(0).toUpperCase() + locale.slice(1);
     sanityClient.fetch(
       `*[_type == "navigationSettings" && !(_id in path("drafts.**"))][0] {
         "faviconUrl": favicon.asset->url,
         "headerLogoUrl": headerLogo.asset->url,
-        "headerLogoLink": headerLogoUrl
+        "headerLogoLink": headerLogoUrl,
+        "navTopTen": navTopTen${suffix},
+        "navFacts": navFacts${suffix},
+        "navMaps": navMaps${suffix}
       }`
     ).then((r: NavigationSettings | null) => {
       setNavSettings(r || {});
@@ -76,9 +80,9 @@ export function Navigation({ locale, activePage }: NavigationProps) {
     ).then((val) => setFactsPublished(val !== false));
   }, [locale]);
 
-  const topTenLabel = cmsTexts.navTopTen || "";
-  const factsLabel = cmsTexts.navFacts || "";
-  const mapsLabel = cmsTexts.navMaps || "";
+  const topTenLabel = navSettings.navTopTen || "";
+  const factsLabel = navSettings.navFacts || "";
+  const mapsLabel = navSettings.navMaps || "";
 
   const visibleLocales = locales.filter((l) => activeLanguages.includes(l));
 
