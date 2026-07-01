@@ -161,6 +161,17 @@ export async function getFooterSettings(): Promise<SiteSettings> {
   return result || {};
 }
 
+export async function getPageMeta(
+  type: "siteTexts" | "factsPage" | "mapsPage",
+  sprache: string
+): Promise<{ metaTitle?: string; metaDescription?: string }> {
+  const result = await sanityClient.fetch(
+    `*[_type == $type && !(_id in path("drafts.**")) && sprache == $sprache][0]{ metaTitle, metaDescription }`,
+    { type, sprache }
+  );
+  return result || {};
+}
+
 export async function getFooterTexts(sprache: string): Promise<FooterTexts> {
   const result = await sanityClient.fetch(
     `*[_type == "footerTexts" && !(_id in path("drafts.**")) && sprache == $sprache][0] {

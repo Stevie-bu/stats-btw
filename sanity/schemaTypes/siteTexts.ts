@@ -28,6 +28,23 @@ export default defineType({
       initialValue: true,
     }),
 
+    // --- SEO ---
+    defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+      description: "Titel der Seite im Browser-Tab und in Google-Resultaten (50–60 Zeichen ideal)",
+      group: "seo",
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 2,
+      description: "Beschreibung in Google-Resultaten (120–160 Zeichen ideal)",
+      group: "seo",
+    }),
+
     // --- Top Ten Seite ---
     defineField({
       name: "topTenPublished",
@@ -264,6 +281,7 @@ export default defineType({
     }),
   ],
   groups: [
+    { name: "seo", title: "SEO", default: true },
     { name: "topTen", title: "Top Ten Seite" },
     { name: "metriken", title: "Metriken & Kategorien" },
     { name: "distanz", title: "Distanz-Feature" },

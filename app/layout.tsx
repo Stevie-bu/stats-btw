@@ -24,30 +24,6 @@ const BASE_URL = "https://stats.biketowork.ch";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "bike to work – Challenge 2026 Stats",
-  description: "Top 10 Betriebe der bike to work Challenge 2026",
-  openGraph: {
-    title: "bike to work – Challenge 2026 Stats",
-    description: "Top 10 Betriebe der bike to work Challenge 2026",
-    url: BASE_URL,
-    siteName: "bike to work Stats",
-    locale: "de_CH",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "bike to work – Challenge 2026 Stats",
-    description: "Top 10 Betriebe der bike to work Challenge 2026",
-  },
-  alternates: {
-    canonical: BASE_URL,
-    languages: {
-      de: BASE_URL,
-      fr: `${BASE_URL}/fr`,
-      it: `${BASE_URL}/it`,
-      en: `${BASE_URL}/en`,
-    },
-  },
   other: {
     "theme-color": "#fa7fdf",
   },

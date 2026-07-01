@@ -21,6 +21,19 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+      description: "Titel der Seite im Browser-Tab und in Google-Resultaten (50–60 Zeichen ideal)",
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 2,
+      description: "Beschreibung in Google-Resultaten (120–160 Zeichen ideal)",
+    }),
+    defineField({
       name: "published",
       title: "Seite veröffentlicht",
       description: "Wenn deaktiviert, ist die Seite nicht aufrufbar und verschwindet aus der Navigation.",
